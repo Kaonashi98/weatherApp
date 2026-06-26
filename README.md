@@ -2,6 +2,8 @@
 
 WeatherApp è un progetto che ho costruito con Angular per mettere insieme una piccola applicazione web utile e abbastanza completa da mostrare il mio modo di lavorare. L’idea era semplice: permettere di cercare una località, vedere il meteo attuale e avere un’interfaccia chiara anche su mobile.
 
+Demo online: [weather-app-blond-six-70.vercel.app](https://weather-app-blond-six-70.vercel.app/)
+
 ## Cosa ho voluto realizzare
 
 - Ricerca di una località con suggerimenti mentre si scrive.
