@@ -1,0 +1,168 @@
+<main class="page">
+  <div class="weather-scene" aria-hidden="true">
+    <span class="sun-or-moon"></span>
+    <span class="sun-rays"></span>
+    <span class="cloud cloud--one"></span>
+    <span class="cloud cloud--two"></span>
+    <span class="cloud cloud--three"></span>
+    <span class="rain-layer rain-layer--back"></span>
+    <span class="rain-layer rain-layer--front"></span>
+    <span class="snow-layer"></span>
+    <span class="fog-layer"></span>
+    <span class="storm-flash"></span>
+    <span class="lightning lightning--one"></span>
+    <span class="lightning lightning--two"></span>
+    <span class="stars"></span>
+  </div>
+
+  <section class="weather-shell" aria-label="WeatherApp">
+    <header class="shell-header">
+      <img class="app-logo" src="images/weatherapp-logo-cropped.png" alt="WeatherApp">
+    </header>
+    <div class="content-grid">
+      <section class="search-panel" [class.search-panel--has-error]="errorMessage" aria-label="Ricerca meteo">
+        <p class="panel-kicker">Ricerca</p>
+        <h2>Controlla il meteo attuale della tua citt&agrave;</h2>
+        <p class="subtitle">Temperatura, vento, umidit&agrave; e condizioni attuali in pochi secondi.</p>
+
+        <div class="search-box">
+          <label class="search-label" for="city">Citt&agrave;</label>
+          <div class="search-row">
+            <input
+              id="city"
+              type="text"
+              placeholder="Roma, Milano, New York"
+              [ngModel]="city"
+              (ngModelChange)="onCityChange($event)"
+              (focus)="openSuggestions()"
+              (blur)="closeSuggestionsSoon()"
+              (keyup.enter)="getWeather()"
+              autocomplete="off"
+              role="combobox"
+              aria-autocomplete="list"
+              [attr.aria-expanded]="showSuggestions"
+            >
+            <button type="button" (click)="getWeather()" [disabled]="isLoading">
+              {{ isLoading ? 'Attendi...' : 'Cerca' }}
+            </button>
+          </div>
+
+          @if (showSuggestions) {
+            <div class="suggestions" role="listbox" aria-label="Suggerimenti localit&agrave;">
+              @if (isSuggesting) {
+                <div class="suggestion-status">Ricerca localit&agrave;...</div>
+              } @else {
+                @for (suggestion of suggestions; track suggestion.id) {
+                  <button
+                    type="button"
+                    class="suggestion-item"
+                    role="option"
+                    (click)="selectCitySuggestion(suggestion)"
+                  >
+                    <span class="suggestion-name">{{ suggestion.name }}</span>
+                    <span class="suggestion-meta">{{ getSuggestionMeta(suggestion) }}</span>
+                  </button>
+                }
+              }
+            </div>
+          }
+        </div>
+
+        @if (errorMessage) {
+          <div class="notice" role="alert">{{ errorMessage }}</div>
+        }
+
+        <div class="quick-list" aria-label="Citt&agrave; principali">
+          @for (quickCity of quickCities; track quickCity) {
+            <button type="button" class="quick-chip" [class.quick-chip--active]="isSelectedCity(quickCity)" (click)="cercaRapida(quickCity)">{{ quickCity }}</button>
+          }
+        </div>
+      </section>
+
+      <section class="weather-card" [class.weather-card--loading]="isLoading" [class.weather-card--overlay-open]="isWeatherPanelOpen" [class.weather-card--overlay-closing]="isWeatherPanelClosing" aria-label="Meteo attuale">
+        <button type="button" class="mobile-return" (click)="showSearchPanel()" aria-label="Torna alla ricerca">
+          <span aria-hidden="true">&larr;</span>
+          <span>Cambia citt&agrave;</span>
+        </button>
+        @if (isLoading) {
+          <div class="weather-skeleton" aria-live="polite" aria-busy="true">
+            <div class="skeleton-line skeleton-kicker"></div>
+            <div class="skeleton-line skeleton-title"></div>
+            <div class="skeleton-main">
+              <div class="skeleton-temp"></div>
+              <div class="skeleton-icon"></div>
+            </div>
+            <div class="skeleton-details">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p class="loading-copy">Aggiorno il meteo in tempo reale...</p>
+          </div>
+        } @else if (weatherData) {
+          <div class="weather-card__top">
+            <div>
+              <p class="label">Localit&agrave;</p>
+              <h2>{{ weatherData.city }}, {{ weatherData.country }}</h2>
+            </div>
+            <div class="condition">{{ weatherData.description }}</div>
+          </div>
+
+          <div class="temperature-row">
+            <div class="temperature">
+              <span>{{ weatherData.temperature }}</span>
+              <small>&deg;C</small>
+            </div>
+            <div class="weather-icon" aria-label="Icona condizioni meteo">
+              <img class="weather-symbol" [src]="weatherData.iconUrl" [alt]="weatherData.description">
+            </div>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <span class="detail__label">Umidit&agrave;</span>
+              <strong>{{ weatherData.humidity }}%</strong>
+            </div>
+            <div class="detail">
+              <span class="detail__label">Vento</span>
+              <strong>{{ weatherData.windSpeed }} km/h</strong>
+            </div>
+            <div class="detail detail--time detail--wide">
+              <span class="detail__label">Ora locale</span>
+              <strong>{{ weatherData.localDateTime }}</strong>
+            </div>
+            <div class="detail">
+              <span class="detail__label">Alba sole</span>
+              <strong>{{ weatherData.sunRiseLabel }}</strong>
+            </div>
+            <div class="detail">
+              <span class="detail__label">Tramonto sole</span>
+              <strong>{{ weatherData.sunSetLabel }}</strong>
+            </div>
+            <div class="detail">
+              <span class="detail__label">Alba luna</span>
+              <strong>{{ weatherData.moonRiseLabel }}</strong>
+            </div>
+            <div class="detail">
+              <span class="detail__label">Tramonto luna</span>
+              <strong>{{ weatherData.moonSetLabel }}</strong>
+            </div>
+            <div class="detail detail--time detail--updated">
+              <span class="detail__label">Meteo aggiornato</span>
+              <strong>{{ weatherData.updatedAtLabel }}</strong>
+            </div>
+          </div>
+        } @else {
+          <div class="empty-weather">
+            <p class="label">Pronto per la ricerca</p>
+            <h2>Cerca una citt&agrave; per visualizzare il meteo.</h2>
+            <p>La dashboard mostrer&agrave; temperatura, umidit&agrave;, vento, ora locale, sole, luna e condizioni attuali.</p>
+          </div>
+        }
+      </section>
+    </div>
+  </section>
+</main>
