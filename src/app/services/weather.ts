@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, map, Observable, of, switchMap, throwError } from 'rxjs';
 
-export type WeatherTheme = 'default' | 'sunny' | 'partly-cloudy' | 'cloudy' | 'cloudy-night' | 'rainy' | 'snowy' | 'stormy' | 'foggy' | 'sunset' | 'night';
+export type WeatherTheme = 'default' | 'sunny' | 'partly-cloudy' | 'partly-cloudy-night' | 'cloudy' | 'cloudy-night' | 'rainy' | 'snowy' | 'stormy' | 'foggy' | 'sunrise' | 'sunset' | 'night';
 
 export type WeatherViewModel = {
   city: string;
@@ -497,8 +497,13 @@ export class WeatherService {
     if ([71, 73, 75, 77, 85, 86].includes(code)) return 'snowy';
     if ([61, 63, 65, 66, 67, 80, 81, 82, 51, 53, 55, 56, 57].includes(code)) return 'rainy';
     if ([45, 48].includes(code)) return 'foggy';
-    if (!isDaylight) return [1, 2, 3].includes(code) || cloudCover > 30 ? 'cloudy-night' : 'night';
-    if (this.isNearSunset(localIso, sunset) || this.isNearSunrise(localIso, sunrise)) return 'sunset';
+    if (!isDaylight) {
+      if ([1, 2].includes(code) || (cloudCover > 15 && cloudCover <= 65)) return 'partly-cloudy-night';
+      if (code === 3 || cloudCover > 65) return 'cloudy-night';
+      return 'night';
+    }
+    if (this.isNearSunrise(localIso, sunrise)) return 'sunrise';
+    if (this.isNearSunset(localIso, sunset)) return 'sunset';
     if ([1, 2].includes(code)) return 'partly-cloudy';
     if (code === 3) return 'cloudy';
     if (code === 0) return 'sunny';
