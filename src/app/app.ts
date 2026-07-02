@@ -70,6 +70,11 @@ export class AppComponent implements OnDestroy {
     return `theme-${this.weatherData?.theme ?? 'default'}`;
   }
 
+  @HostBinding('style.--orb-top')
+  get orbTop(): string | null {
+    return this.weatherData ? `${this.getSolarOrbTop(this.weatherData)}vh` : null;
+  }
+
   constructor(private readonly weatherService: WeatherService) {}
 
   ngOnDestroy(): void {
@@ -281,6 +286,95 @@ export class AppComponent implements OnDestroy {
       .trim();
   }
 
+  private getSolarOrbTop(weather: WeatherViewModel): number {
+    if (!weather.sunRise || !weather.sunSet) return 7;
+
+    const localIso = this.getLocalIso(weather.timeZone);
+    const sunrise = this.normalizeEventIso(weather.sunRise);
+    const sunset = this.normalizeEventIso(weather.sunSet);
+
+    if (weather.theme === 'sunrise') {
+      const progress = this.getProgress(localIso, this.addMinutes(sunrise, -30), this.addMinutes(sunrise, 60));
+      return this.lerp(72, 42, this.easeOut(progress));
+    }
+
+    if (weather.theme === 'sunset') {
+      const progress = this.getProgress(localIso, this.addMinutes(sunset, -60), sunset);
+      return this.lerp(42, 72, this.easeIn(progress));
+    }
+
+    if (weather.theme === 'sunny' || weather.theme === 'partly-cloudy') {
+      const progress = this.getProgress(localIso, sunrise, sunset);
+      return 68 - Math.sin(Math.PI * progress) * 54;
+    }
+
+    return weather.theme.includes('night') ? 7 : 18;
+  }
+
+  private getLocalIso(timeZone: string): string {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+      timeZone
+    }).formatToParts(new Date());
+    const part = (type: Intl.DateTimeFormatPartTypes): string => parts.find((item) => item.type === type)?.value ?? '00';
+
+    return `${part('year')}-${part('month')}-${part('day')}T${part('hour')}:${part('minute')}:${part('second')}`;
+  }
+
+  private normalizeEventIso(value: string): string {
+    return value.replace(/([+-]\d{2}:\d{2}|Z)$/, '');
+  }
+
+  private addMinutes(localIso: string, minutes: number): string {
+    const date = this.toLocalDate(localIso);
+    date.setMinutes(date.getMinutes() + minutes);
+
+    return this.toLocalIso(date);
+  }
+
+  private getProgress(localIso: string, startIso: string, endIso: string): number {
+    const start = this.toLocalDate(startIso).getTime();
+    const end = this.toLocalDate(endIso).getTime();
+    const current = this.toLocalDate(localIso).getTime();
+
+    return this.clamp((current - start) / (end - start));
+  }
+
+  private toLocalDate(localIso: string): Date {
+    const [date, time] = localIso.split('T');
+    const [year, month, day] = date.split('-').map(Number);
+    const [hour, minute, second = 0] = time.split(':').map(Number);
+
+    return new Date(year, month - 1, day, hour, minute, second);
+  }
+
+  private toLocalIso(value: Date): string {
+    const pad = (input: number): string => input.toString().padStart(2, '0');
+
+    return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}`;
+  }
+
+  private lerp(start: number, end: number, progress: number): number {
+    return start + (end - start) * progress;
+  }
+
+  private easeIn(progress: number): number {
+    return progress * progress;
+  }
+
+  private easeOut(progress: number): number {
+    return 1 - Math.pow(1 - progress, 2);
+  }
+
+  private clamp(value: number): number {
+    return Math.min(1, Math.max(0, value));
+  }
   private startLocalClock(): void {
     this.stopLocalClock();
     this.clockTimer = setInterval(() => {
