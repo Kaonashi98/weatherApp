@@ -2,9 +2,7 @@
   --ink: #101828;
   --muted: #667085;
   --panel: rgba(255, 255, 255, 0.84);
-  --stroke: rgba(255, 255, 255, 0.44);
   --blue: #2563eb;
-  --cyan: #06b6d4;
   --violet: #7c3aed;
   --shadow: 0 28px 80px rgba(15, 23, 42, 0.24);
   --orb-size: clamp(220px, 25vw, 380px);
@@ -57,14 +55,16 @@
 }
 
 :host(.theme-sunrise) {
-  --orb-top: 13vh;
-  background: linear-gradient(135deg, #fbcfe8 0%, #fb923c 34%, #fde68a 58%, #38bdf8 100%);
+  --orb-top: 18vh;
+  --orb-right: 6vw;
+  background: linear-gradient(180deg, #214b8f 0%, #5567b1 34%, #e7a4bd 58%, #ffd08a 78%, #ff8f5d 100%);
 }
 
-:host(.theme-sunset) {
-  --orb-top: 51vh;
-  --orb-right: 6vw;
-  background: linear-gradient(135deg, #4338ca 0%, #7c3aed 25%, #f97316 62%, #fde68a 100%);
+:host(.theme-sunset),
+:host(.theme-sunset-glow) {
+  --orb-top: 57vh;
+  --orb-right: 7vw;
+  background: linear-gradient(180deg, #2d1b55 0%, #71365f 32%, #d05243 55%, #ff8a2a 73%, #f6c36b 100%);
 }
 
 :host(.theme-night) {
@@ -122,15 +122,30 @@
 }
 
 :host(.theme-sunrise) .weather-scene::before {
-  opacity: 0.52;
-  background-image: linear-gradient(180deg, rgba(251, 207, 232, 0.38), rgba(253, 186, 116, 0.22), rgba(56, 189, 248, 0.14)), url('/condizioni_atmosferiche/cielo_sereno.png');
-  filter: saturate(1.12) brightness(1.05) sepia(0.10);
+  opacity: 0.86;
+  background-image:
+    linear-gradient(180deg, rgba(20, 58, 126, 0.10) 0%, rgba(88, 92, 174, 0.08) 34%, rgba(255, 167, 190, 0.08) 58%, rgba(255, 206, 132, 0.10) 82%, rgba(255, 139, 91, 0.08) 100%),
+    url('/condizioni_atmosferiche/cielo_alba.png');
+  background-position: center bottom;
+  filter: saturate(1.12) brightness(1.05) contrast(1.02);
 }
 
 :host(.theme-sunset) .weather-scene::before {
-  opacity: 0.50;
-  background-image: linear-gradient(180deg, rgba(124, 58, 237, 0.28), rgba(249, 115, 22, 0.28), rgba(253, 230, 138, 0.12)), url('/condizioni_atmosferiche/cielo_sereno.png');
-  filter: saturate(1.14) brightness(1.02) sepia(0.18);
+  opacity: 0.88;
+  background-image:
+    linear-gradient(180deg, rgba(28, 16, 68, 0.18) 0%, rgba(128, 45, 94, 0.08) 34%, rgba(255, 109, 42, 0.06) 62%, rgba(255, 191, 94, 0.12) 100%),
+    url('/condizioni_atmosferiche/cielo_tramonto.png');
+  background-position: center bottom;
+  filter: saturate(1.16) brightness(1.04) contrast(1.04);
+}
+
+:host(.theme-sunset-glow) .weather-scene::before {
+  opacity: 0.90;
+  background-image:
+    linear-gradient(180deg, rgba(20, 10, 48, 0.24) 0%, rgba(87, 36, 76, 0.14) 35%, rgba(194, 78, 45, 0.10) 68%, rgba(73, 55, 62, 0.20) 100%),
+    url('/condizioni_atmosferiche/cielo_tramonto.png');
+  background-position: center bottom;
+  filter: saturate(1.04) brightness(0.88) contrast(1.06);
 }
 
 :host(.theme-partly-cloudy) .weather-scene::before {
@@ -244,11 +259,12 @@
 }
 
 :host(.theme-sunset) .sun-or-moon {
-  filter: saturate(1.1) brightness(1.05) sepia(0.12);
+  filter: saturate(1.18) brightness(1.08) sepia(0.18);
   animation: sunset-drop 16s ease-in-out infinite alternate;
 }
 
 :host(.theme-sunrise) .sun-or-moon {
+  filter: saturate(1.12) brightness(1.08) sepia(0.08);
   animation: sunrise-lift 18s ease-in-out infinite alternate;
 }
 
@@ -271,11 +287,15 @@
 }
 
 :host(.theme-sunset) .sun-rays {
-  opacity: 0.62;
+  opacity: 0.74;
+  background: radial-gradient(circle, rgba(255, 226, 150, 0.44) 0 20%, rgba(255, 126, 45, 0.22) 36%, transparent 58%);
+  filter: blur(14px);
 }
 
 :host(.theme-sunrise) .sun-rays {
-  opacity: 0.68;
+  opacity: 0.76;
+  background: radial-gradient(circle, rgba(255, 232, 178, 0.40) 0 20%, rgba(255, 171, 119, 0.18) 36%, transparent 58%);
+  filter: blur(13px);
 }
 
 :host(.theme-night) .sun-rays,
