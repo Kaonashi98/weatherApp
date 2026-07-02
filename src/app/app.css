@@ -189,7 +189,6 @@
 
 .sun-or-moon,
 .sun-rays,
-.cloud,
 .rain-layer,
 .snow-layer,
 .fog-layer,
@@ -286,70 +285,6 @@
     radial-gradient(circle, rgba(255, 255, 255, 0.25) 0 18%, transparent 48%),
     conic-gradient(from 12deg, rgba(255, 255, 255, 0.28) 0deg 8deg, transparent 13deg 42deg, rgba(219, 234, 254, 0.24) 62deg 70deg, transparent 76deg 126deg, rgba(255, 255, 255, 0.18) 148deg 158deg, transparent 164deg 224deg, rgba(219, 234, 254, 0.22) 246deg 254deg, transparent 260deg 318deg, rgba(255, 255, 255, 0.18) 336deg 344deg, transparent 350deg 360deg);
   filter: blur(13px);
-}
-
-.cloud {
-  width: min(150vw, 2400px);
-  height: min(82vh, 920px);
-  border-radius: 0;
-  opacity: 0;
-  background: url('/condizioni_atmosferiche/nuvole.png') center / contain no-repeat;
-  filter: blur(0.4px) saturate(0.92) brightness(1.02);
-  mix-blend-mode: screen;
-}
-
-.cloud::before,
-.cloud::after {
-  display: none;
-}
-
-.cloud--one {
-  left: -38vw;
-  top: -12vh;
-}
-
-.cloud--two {
-  left: -70vw;
-  top: 14vh;
-  transform: scale(0.86);
-  animation-duration: 68s;
-  animation-delay: -18s;
-}
-
-.cloud--three {
-  left: -54vw;
-  top: 42vh;
-  transform: scale(0.92);
-  animation-duration: 78s;
-  animation-delay: -34s;
-}
-
-:host(.theme-partly-cloudy) .cloud,
-:host(.theme-partly-cloudy-night) .cloud {
-  opacity: 0;
-}
-
-:host(.theme-partly-cloudy) .cloud--two,
-:host(.theme-partly-cloudy-night) .cloud--two {
-  animation-duration: 68s;
-  animation-delay: -18s;
-}
-
-:host(.theme-partly-cloudy) .cloud--three,
-:host(.theme-partly-cloudy-night) .cloud--three {
-  animation-duration: 78s;
-  animation-delay: -34s;
-}
-
-:host(.theme-partly-cloudy) .cloud {
-  opacity: 0;
-  filter: blur(0.25px) saturate(1.04) brightness(1.08);
-}
-
-:host(.theme-partly-cloudy-night) .cloud {
-  opacity: 0;
-  filter: blur(0.6px) saturate(0.72) brightness(0.62) contrast(1.08);
-  mix-blend-mode: normal;
 }
 
 .rain-layer {
@@ -546,7 +481,7 @@ p {
   border-radius: 24px;
   background: var(--panel);
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.14);
-  overflow: hidden;
+  overflow: hidden auto;
 }
 
 .search-panel {
@@ -698,7 +633,7 @@ button:disabled {
   gap: 7px;
   min-height: 0;
   margin-top: 16px;
-  overflow: visible;
+  overflow: hidden auto;
 }
 
 .search-panel--has-error .quick-list {
@@ -999,6 +934,7 @@ button:disabled {
   }
 }
 
+@media (max-height: 760px) and (min-width: 621px) { :host { overflow: auto; } .page { align-items: start; height: auto; overflow: visible; } .weather-shell { height: auto; transform: none; overflow: visible; } .content-grid, .search-panel, .weather-card { overflow: visible; } }
 @media (max-width: 1040px) {
   .weather-shell {
     width: min(780px, 100%);
@@ -1081,6 +1017,7 @@ button:disabled {
   .quick-list {
     flex: 0 0 auto;
     max-height: none;
+    overflow: visible;
   }
 
 
