@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy } from '@angular/core';
+import { Component, HostBinding, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Subscription, timer } from 'rxjs';
@@ -9,6 +9,7 @@ import { CitySuggestion, WeatherService, WeatherViewModel } from './services/wea
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.css'
 })
 export class AppComponent implements OnDestroy {
