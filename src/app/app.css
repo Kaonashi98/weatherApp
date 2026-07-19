@@ -995,7 +995,7 @@ button:disabled {
   }
 
   :host { overflow: auto; }
-  .page { align-items: start; }
+  .page { align-items: center; }
 
   .weather-shell {
     height: auto;
