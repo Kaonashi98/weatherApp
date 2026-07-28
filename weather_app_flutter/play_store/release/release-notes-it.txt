@@ -1,0 +1,1 @@
+Prima versione di WeatherApp per Android. Cerca una città per visualizzare condizioni meteo attuali, temperatura, umidità, vento, ora locale, alba, tramonto ed eventi lunari, con sfondi dinamici coerenti con il meteo e il momento della giornata.

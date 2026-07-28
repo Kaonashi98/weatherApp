@@ -1,0 +1,6 @@
+# Copy this file to android/key.properties and replace every placeholder.
+# Never commit key.properties or the .jks file.
+storeFile=keystore/weatherapp-upload.jks
+storePassword=REPLACE_WITH_A_STRONG_PASSWORD
+keyAlias=weatherapp-upload
+keyPassword=REPLACE_WITH_A_STRONG_PASSWORD
