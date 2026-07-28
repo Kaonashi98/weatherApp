@@ -1,0 +1,5 @@
+Weather condition icons
+Source: WeatherAPI.com (https://www.weatherapi.com/)
+Original paths: https://cdn.weatherapi.com/weather/128x128/{day|night}/{code}.png
+WeatherApp credits WeatherAPI.com in its in-app legal information, privacy policy, and store listing.
+Downloaded for local inclusion on 2026-07-28 to avoid runtime CDN requests.

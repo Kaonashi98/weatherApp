@@ -482,7 +482,7 @@ export class WeatherService {
     if ([71, 73, 75, 77, 85, 86].includes(code)) iconCode = 338;
     if ([95, 96, 99].includes(code)) iconCode = 389;
 
-    return `https://cdn.weatherapi.com/weather/128x128/${moment}/${iconCode}.png`;
+    return `/weather_icons/${moment}/${iconCode}.png`;
   }
 
   private getWeatherTheme(
