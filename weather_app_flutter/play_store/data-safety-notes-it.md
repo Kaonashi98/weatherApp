@@ -13,7 +13,7 @@ Queste note sono una base operativa per la compilazione in Play Console.
 - Solo permesso INTERNET.
 - Il nome della località digitata viene inviato a Open-Meteo.
 - Coordinate, IP e dati tecnici di rete vengono ricevuti da Open-Meteo e MET Norway.
-- Le icone WeatherAPI.com sono incorporate nell'app e non generano richieste al relativo servizio durante l'uso.
+- Icone e immagini atmosferiche sono risorse originali incorporate localmente e non generano richieste di rete.
 - Nessuna cronologia delle ricerche salvata permanentemente dall'app.
 - Dati cifrati in transito tramite HTTPS.
 

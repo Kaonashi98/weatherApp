@@ -63,7 +63,7 @@ Le condizioni più forti, come pioggia, neve, nebbia e temporale, hanno priorit�
 - [Open-Meteo Geocoding API](https://open-meteo.com/) per cercare le località.
 - [Open-Meteo Forecast API](https://open-meteo.com/) per temperatura, umidità, vento, copertura nuvolosa e codice meteo.
 - [MET Norway Sunrise API](https://api.met.no/) per alba, tramonto, luna e dati astronomici.
-- Icone meteo caricate da CDN WeatherAPI.
+- Icone meteo originali create appositamente per WeatherApp e incluse localmente.
 
 Non sono necessarie chiavi API per avviare il progetto in locale.
 

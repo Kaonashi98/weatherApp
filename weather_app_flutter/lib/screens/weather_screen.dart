@@ -300,15 +300,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 const _LegalSection(
                   title: 'Dati trattati',
                   body:
-                      'WeatherApp non richiede account e non usa sistemi di tracciamento. Il nome della località viene inviato a Open-Meteo; coordinate e dati tecnici vengono trasmessi a Open-Meteo e MET Norway. Le icone WeatherAPI.com sono incluse nell’app e non generano richieste al servizio durante l’uso. L’app non salva permanentemente le ricerche.',
+                      'WeatherApp non richiede account e non usa sistemi di tracciamento. Il nome della località viene inviato a Open-Meteo; coordinate e dati tecnici vengono trasmessi a Open-Meteo e MET Norway. Icone e immagini atmosferiche sono risorse locali e non generano richieste verso altri fornitori. L’app non salva permanentemente le ricerche.',
                 ),
                 const _LegalSection(
                   title: 'Fonti e licenze',
                   body:
-                      'Meteo e geocodifica: Open-Meteo, con dati di località basati su GeoNames. Eventi di sole e luna: MET Norway. Icone meteo: WeatherAPI.com. Logo e immagini atmosferiche locali sono utilizzati con autorizzazione del proprietario.',
+                      'Meteo e geocodifica: Open-Meteo, con dati attribuiti secondo CC BY 4.0 e località basate anche su GeoNames. Eventi di sole e luna: MET Norway, dati NLOD 2.0/CC BY 4.0. Icone meteo, logo e immagini atmosferiche sono risorse originali di WeatherApp.',
                 ),
                 const SelectableText(
-                  'weatherapp.help@outlook.com\nweather-app-blond-six-70.vercel.app/privacy.html\nopen-meteo.com\ndocs.api.met.no/doc/License.html\nweatherapi.com\ngeonames.org',
+                  'weatherapp.help@outlook.com\nweather-app-blond-six-70.vercel.app/privacy.html\nopen-meteo.com/en/terms\ndocs.api.met.no/doc/License.html\ngeonames.org',
                   style: TextStyle(
                     color: Color(0xFF1D4ED8),
                     fontWeight: FontWeight.w700,

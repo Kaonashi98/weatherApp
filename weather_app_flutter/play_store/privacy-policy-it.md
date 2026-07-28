@@ -19,17 +19,16 @@ Quando l'utente cerca una località:
 - il testo della ricerca viene inviato a Open-Meteo per individuare la località;
 - le coordinate della località selezionata vengono inviate a Open-Meteo per ottenere le condizioni meteorologiche;
 - le coordinate vengono inviate a MET Norway per ottenere gli eventi astronomici relativi a sole e luna;
-- le icone WeatherAPI.com sono incluse nell'app e non richiedono collegamenti al servizio durante l'uso;
+- le icone e le immagini atmosferiche sono risorse locali dell'app e non generano richieste verso fornitori esterni;
 - Open-Meteo e MET Norway ricevono necessariamente l'indirizzo IP e le informazioni tecniche della connessione.
 
 Questi dati sono trattati esclusivamente per fornire la funzione meteo richiesta dall'utente. WeatherApp non conserva in modo permanente sul dispositivo le località cercate e non gestisce un proprio database di utenti. L'app non accede alla posizione GPS del dispositivo.
 
 ## Fornitori esterni
 
-- Open-Meteo GmbH — meteo e geocodifica: https://open-meteo.com/en/terms
-- MET Norway — eventi astronomici: https://www.met.no/en/About-us/privacy
+- Open-Meteo GmbH — meteo e geocodifica, dati con attribuzione CC BY 4.0: https://open-meteo.com/en/terms
+- MET Norway — eventi astronomici, dati con attribuzione NLOD 2.0/CC BY 4.0: https://docs.api.met.no/doc/License.html
 - GeoNames — fonte dei dati di località usati dal servizio di geocodifica: https://www.geonames.org/
-- WeatherAPI.com — icone delle condizioni meteorologiche: https://www.weatherapi.com/
 
 Open-Meteo dichiara che i log tecnici del servizio gratuito, che possono includere IP e coordinate, vengono eliminati dopo 90 giorni. MET Norway dichiara che le richieste dirette possono registrare IP e coordinate nei propri log in Norvegia. Tempi e modalità dei fornitori sono disciplinati dalle rispettive informative.
 

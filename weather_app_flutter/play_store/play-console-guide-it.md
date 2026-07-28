@@ -51,7 +51,7 @@ Comportamento dell'app:
 - IP e dati tecnici ricevuti dai due fornitori per erogare il servizio;
 - dati trasmessi tramite HTTPS;
 - nessuna cronologia conservata dall'app;
-- icone meteo incorporate localmente, senza richieste a WeatherAPI durante l'uso.
+- icone meteo originali incorporate localmente, senza richieste a servizi esterni;
 
 Non selezionare automaticamente “nessun dato raccolto”. Valutare in modo conservativo le categorie “Località approssimativa”, “Attività nell'app / altre azioni” e “Identificatori del dispositivo o altri identificatori”, specificando finalità “Funzionalità dell'app”, dati necessari e trattamento da parte di fornitori di servizio. Le risposte finali devono restare coerenti con la privacy policy.
 

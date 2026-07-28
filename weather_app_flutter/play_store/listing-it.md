@@ -23,7 +23,7 @@ Cerca una località oppure seleziona una delle città suggerite per visualizzare
 
 Non è necessario creare un account. L'app è totalmente gratuita, non contiene pubblicità né acquisti in-app e non accede alla posizione GPS del dispositivo: sei tu a scegliere la città da cercare.
 
-I dati meteorologici sono forniti da Open-Meteo. Gli eventi astronomici sono forniti da MET Norway. I dati di località del servizio di geocodifica sono basati anche su GeoNames. Le icone meteo sono fornite da WeatherAPI.com.
+I dati meteorologici sono forniti da Open-Meteo. Gli eventi astronomici sono forniti da MET Norway. I dati di località del servizio di geocodifica sono basati anche su GeoNames. Le icone e le immagini atmosferiche sono risorse originali di WeatherApp.
 
 Le informazioni mostrate sono indicative e non devono essere utilizzate per decisioni di sicurezza o emergenza.
 

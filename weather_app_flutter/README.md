@@ -23,7 +23,7 @@ lib/
   widgets/weather_scene.dart   Sfondo e animazioni meteo
 ```
 
-L'app usa Open-Meteo per geocoding e condizioni correnti, e MET Norway Sunrise API per gli eventi di sole e luna. Le icone originali WeatherAPI.com sono incorporate negli asset locali con attribuzione, quindi non richiedono collegamenti al CDN durante l'uso. Se i dati astronomici non sono temporaneamente disponibili, le condizioni meteo principali vengono comunque mostrate.
+L'app usa Open-Meteo per geocoding e condizioni correnti, e MET Norway Sunrise API per gli eventi di sole e luna. Le icone meteo sono una famiglia grafica originale creata appositamente per WeatherApp e inclusa negli asset locali, quindi non richiedono servizi esterni durante l'uso. Se i dati astronomici non sono temporaneamente disponibili, le condizioni meteo principali vengono comunque mostrate.
 
 ## Avvio locale
 

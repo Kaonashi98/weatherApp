@@ -1,5 +1,5 @@
-Weather condition icons
-Source: WeatherAPI.com (https://www.weatherapi.com/)
-Original paths: https://cdn.weatherapi.com/weather/128x128/{day|night}/{code}.png
-WeatherApp credits WeatherAPI.com in its in-app legal information, privacy policy, and store listing.
-Downloaded for local inclusion on 2026-07-28 to avoid runtime CDN requests.
+WeatherApp original weather icon set
+Created specifically for WeatherApp on 2026-07-28 using OpenAI image generation.
+Concept, production source sheets and final exports are preserved in
+play_store/assets/weather-icons-source and assets/weather_icons.
+Copyright 2026 Nicola Zingaro. All rights reserved.
