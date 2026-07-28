@@ -1,5 +1,0 @@
-WeatherApp original weather icon set
-Created specifically for WeatherApp on 2026-07-28 using OpenAI image generation.
-Concept, production source sheets and final exports are preserved in
-play_store/assets/weather-icons-source and assets/weather_icons.
-Copyright 2026 Nicola Zingaro. All rights reserved.

@@ -42,7 +42,3 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
-# Flutter Google Play signing secrets
-/weather_app_flutter/android/key.properties
-/weather_app_flutter/android/keystore/*.jks
-/weather_app_flutter/android/keystore/*.keystore
