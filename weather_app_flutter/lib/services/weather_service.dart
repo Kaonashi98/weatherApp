@@ -587,19 +587,20 @@ class WeatherService {
     if ([61, 63, 65, 66, 67, 80, 81, 82, 51, 53, 55, 56, 57].contains(code))
       return WeatherTheme.rainy;
     if ([45, 48].contains(code)) return WeatherTheme.foggy;
+    if ([1, 2].contains(code) || (cloudCover > 15 && cloudCover <= 65)) {
+      return isDaylight
+          ? WeatherTheme.partlyCloudy
+          : WeatherTheme.partlyCloudyNight;
+    }
+    if (code == 3 || cloudCover > 65) {
+      return isDaylight ? WeatherTheme.cloudy : WeatherTheme.cloudyNight;
+    }
     if (_isNearSunrise(localIso, sunrise)) return WeatherTheme.sunrise;
     if (_isNearSunset(localIso, sunset))
       return _isAfterSunset(localIso, sunset)
           ? WeatherTheme.sunsetGlow
           : WeatherTheme.sunset;
-    if (!isDaylight) {
-      if ([1, 2].contains(code) || (cloudCover > 15 && cloudCover <= 65))
-        return WeatherTheme.partlyCloudyNight;
-      if (code == 3 || cloudCover > 65) return WeatherTheme.cloudyNight;
-      return WeatherTheme.night;
-    }
-    if ([1, 2].contains(code)) return WeatherTheme.partlyCloudy;
-    if (code == 3) return WeatherTheme.cloudy;
+    if (!isDaylight) return WeatherTheme.night;
     if (code == 0) return WeatherTheme.sunny;
     return WeatherTheme.standard;
   }

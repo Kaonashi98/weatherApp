@@ -121,12 +121,19 @@ void main() {
       );
     }
 
-    WeatherTheme themeAt(int hour, int minute, {int code = 0}) {
+    WeatherTheme themeAt(
+      int hour,
+      int minute, {
+      int code = 0,
+      int cloudCover = 5,
+    }) {
       final service = WeatherService(
         now: () => DateTime.utc(2026, 7, 28, hour, minute),
       );
       addTearDown(service.dispose);
-      return service.refreshLiveFields(sampleWeather(code: code)).theme;
+      return service
+          .refreshLiveFields(sampleWeather(code: code, cloudCover: cloudCover))
+          .theme;
     }
 
     test('usa alba, giorno, tramonto, bagliore e notte alle ore corrette', () {
@@ -137,9 +144,20 @@ void main() {
       expect(themeAt(23, 0), WeatherTheme.night);
     });
 
-    test('le condizioni meteo hanno priorità sulla fascia dell’alba', () {
+    test('le condizioni meteo hanno priorità su alba e tramonto', () {
       expect(themeAt(5, 45, code: 61), WeatherTheme.rainy);
       expect(themeAt(5, 45, code: 95), WeatherTheme.stormy);
+      expect(themeAt(5, 45, code: 2), WeatherTheme.partlyCloudyNight);
+      expect(themeAt(6, 15, code: 3), WeatherTheme.cloudy);
+      expect(themeAt(19, 30, code: 2), WeatherTheme.partlyCloudy);
+      expect(themeAt(20, 10, code: 3), WeatherTheme.cloudyNight);
+    });
+
+    test('anche la copertura nuvolosa ha priorità sugli eventi solari', () {
+      expect(themeAt(6, 15, cloudCover: 45), WeatherTheme.partlyCloudy);
+      expect(themeAt(6, 15, cloudCover: 90), WeatherTheme.cloudy);
+      expect(themeAt(20, 10, cloudCover: 45), WeatherTheme.partlyCloudyNight);
+      expect(themeAt(20, 10, cloudCover: 90), WeatherTheme.cloudyNight);
     });
   });
 }

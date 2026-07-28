@@ -497,15 +497,15 @@ export class WeatherService {
     if ([71, 73, 75, 77, 85, 86].includes(code)) return 'snowy';
     if ([61, 63, 65, 66, 67, 80, 81, 82, 51, 53, 55, 56, 57].includes(code)) return 'rainy';
     if ([45, 48].includes(code)) return 'foggy';
+    if ([1, 2].includes(code) || (cloudCover > 15 && cloudCover <= 65)) {
+      return isDaylight ? 'partly-cloudy' : 'partly-cloudy-night';
+    }
+    if (code === 3 || cloudCover > 65) {
+      return isDaylight ? 'cloudy' : 'cloudy-night';
+    }
     if (this.isNearSunrise(localIso, sunrise)) return 'sunrise';
     if (this.isNearSunset(localIso, sunset)) return this.isAfterSunset(localIso, sunset) ? 'sunset-glow' : 'sunset';
-    if (!isDaylight) {
-      if ([1, 2].includes(code) || (cloudCover > 15 && cloudCover <= 65)) return 'partly-cloudy-night';
-      if (code === 3 || cloudCover > 65) return 'cloudy-night';
-      return 'night';
-    }
-    if ([1, 2].includes(code)) return 'partly-cloudy';
-    if (code === 3) return 'cloudy';
+    if (!isDaylight) return 'night';
     if (code === 0) return 'sunny';
     return 'default';
   }
