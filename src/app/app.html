@@ -84,7 +84,7 @@
         }
 
         <div class="city-lists-wrap">
-          <div #cityLists class="city-lists" [class.city-lists--has-more]="showCityScrollHint" (scroll)="updateCityScrollHint()">
+          <div class="city-lists">
             @if (recentCities.length) {
               <section class="city-section" aria-label="Citt&agrave; recenti">
                 <div class="city-section-header">
@@ -108,13 +108,6 @@
               </div>
             </section>
           </div>
-
-          @if (showCityScrollHint) {
-            <button type="button" class="city-scroll-hint" aria-label="Mostra altre citt&agrave;" (click)="scrollCityList()">
-              <span>Scorri</span>
-              <span class="city-scroll-hint__arrow" aria-hidden="true">&#8595;</span>
-            </button>
-          }
         </div>
 
         <button type="button" class="legal-link" (click)="openInfoPanel()">Privacy, fonti e licenze</button>

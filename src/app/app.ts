@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Subscription, timer } from 'rxjs';
@@ -29,7 +20,7 @@ import { RecentCitiesService } from './services/recent-cities';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.css'
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements OnDestroy {
   readonly quickCities = [
     'Roma',
     'Milano',
@@ -77,9 +68,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   isWeatherPanelClosing = false;
   isSearchFocused = false;
   isInfoPanelOpen = false;
-  showCityScrollHint = false;
-
-  @ViewChild('cityLists') private cityListsElement?: ElementRef<HTMLElement>;
 
   private searchSubscription: Subscription | null = null;
   private suggestionSubscription: Subscription | null = null;
@@ -88,7 +76,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private clockTimer: ReturnType<typeof setInterval> | null = null;
   private weatherPanelCloseTimer: ReturnType<typeof setTimeout> | null = null;
   private weatherRequestId = 0;
-  private cityListsResizeObserver: ResizeObserver | null = null;
 
   @HostBinding('class')
   get themeClass(): string {
@@ -107,15 +94,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.recentCities = this.recentCitiesService.load();
   }
 
-  ngAfterViewInit(): void {
-    const cityLists = this.cityListsElement?.nativeElement;
-    if (cityLists && typeof ResizeObserver !== 'undefined') {
-      this.cityListsResizeObserver = new ResizeObserver(() => this.scheduleCityScrollHintUpdate());
-      this.cityListsResizeObserver.observe(cityLists);
-    }
-    this.scheduleCityScrollHintUpdate();
-  }
-
   ngOnDestroy(): void {
     this.weatherRequestId++;
     this.searchSubscription?.unsubscribe();
@@ -124,7 +102,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.clearCloseSuggestionsTimer();
     this.stopLocalClock();
     this.clearWeatherPanelCloseTimer();
-    this.cityListsResizeObserver?.disconnect();
   }
 
   getWeather(): void {
@@ -174,7 +151,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.weatherData = data;
         this.city = data.locationLabel;
         this.recentCities = this.recentCitiesService.remember(data.locationLabel);
-        this.scheduleCityScrollHintUpdate();
         this.isLoading = false;
         this.searchSubscription = null;
         this.startLocalClock();
@@ -296,26 +272,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   clearRecentCities(): void {
     this.recentCitiesService.clear();
     this.recentCities = [];
-    this.scheduleCityScrollHintUpdate();
-  }
-
-  updateCityScrollHint(): void {
-    const cityLists = this.cityListsElement?.nativeElement;
-    if (!cityLists) return;
-
-    const hasOverflow = cityLists.scrollHeight > cityLists.clientHeight + 2;
-    const isAtBottom = cityLists.scrollTop + cityLists.clientHeight >= cityLists.scrollHeight - 2;
-    this.showCityScrollHint = hasOverflow && !isAtBottom;
-  }
-
-  scrollCityList(): void {
-    const cityLists = this.cityListsElement?.nativeElement;
-    if (!cityLists) return;
-
-    cityLists.scrollBy({
-      top: Math.max(160, Math.round(cityLists.clientHeight * 0.62)),
-      behavior: 'smooth'
-    });
   }
 
   openInfoPanel(): void {
@@ -339,11 +295,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.weatherData = this.weatherService.refreshLiveFields(this.weatherData);
       this.startLocalClock();
     }
-  }
-
-  @HostListener('window:resize')
-  onWindowResize(): void {
-    this.scheduleCityScrollHintUpdate();
   }
 
   private openWeatherPanel(): void {
@@ -464,9 +415,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     return 'Non \u00e8 stato possibile aggiornare il meteo. Riprova tra poco.';
   }
 
-  private scheduleCityScrollHintUpdate(): void {
-    setTimeout(() => this.updateCityScrollHint());
-  }
 
   private getLocalIso(timeZone: string): string {
     const parts = new Intl.DateTimeFormat('en-CA', {
