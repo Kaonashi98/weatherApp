@@ -70,4 +70,24 @@ describe('AppComponent', () => {
     expect(compiled.textContent).toContain('Privacy, fonti e licenze');
     expect(compiled.querySelector('[role="dialog"]')).toBeTruthy();
   });
+
+  it('mostra l\'indicatore finche ci sono altre citta sotto', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const cityLists = fixture.nativeElement.querySelector('.city-lists') as HTMLElement;
+    Object.defineProperties(cityLists, {
+      clientHeight: { configurable: true, value: 300 },
+      scrollHeight: { configurable: true, value: 900 },
+      scrollTop: { configurable: true, value: 0, writable: true }
+    });
+
+    app.updateCityScrollHint();
+    expect(app.showCityScrollHint).toBe(true);
+
+    cityLists.scrollTop = 600;
+    app.updateCityScrollHint();
+    expect(app.showCityScrollHint).toBe(false);
+  });
 });

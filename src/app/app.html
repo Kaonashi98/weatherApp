@@ -83,29 +83,38 @@
           <div class="notice" role="alert">{{ errorMessage }}</div>
         }
 
-        <div class="city-lists">
-          @if (recentCities.length) {
-            <section class="city-section" aria-label="Citt&agrave; recenti">
-              <div class="city-section-header">
-                <p class="panel-kicker">Recenti</p>
-                <button type="button" class="text-action text-action--danger" (click)="clearRecentCities()">Cancella</button>
-              </div>
-              <div class="recent-list">
-                @for (recentCity of recentCities; track recentCity) {
-                  <button type="button" class="quick-chip recent-chip" [class.quick-chip--active]="isSelectedCity(recentCity)" (click)="cercaRapida(recentCity)">{{ recentCity }}</button>
+        <div class="city-lists-wrap">
+          <div #cityLists class="city-lists" [class.city-lists--has-more]="showCityScrollHint" (scroll)="updateCityScrollHint()">
+            @if (recentCities.length) {
+              <section class="city-section" aria-label="Citt&agrave; recenti">
+                <div class="city-section-header">
+                  <p class="panel-kicker">Recenti</p>
+                  <button type="button" class="text-action text-action--danger" (click)="clearRecentCities()">Cancella</button>
+                </div>
+                <div class="recent-list">
+                  @for (recentCity of recentCities; track recentCity) {
+                    <button type="button" class="quick-chip recent-chip" [class.quick-chip--active]="isSelectedCity(recentCity)" (click)="cercaRapida(recentCity)">{{ recentCity }}</button>
+                  }
+                </div>
+              </section>
+            }
+
+            <section class="city-section" aria-label="Citt&agrave; principali">
+              <p class="panel-kicker">Citt&agrave; suggerite</p>
+              <div class="quick-list">
+                @for (quickCity of quickCities; track quickCity) {
+                  <button type="button" class="quick-chip" [class.quick-chip--active]="isSelectedCity(quickCity)" (click)="cercaRapida(quickCity)">{{ quickCity }}</button>
                 }
               </div>
             </section>
-          }
+          </div>
 
-          <section class="city-section" aria-label="Citt&agrave; principali">
-            <p class="panel-kicker">Citt&agrave; suggerite</p>
-            <div class="quick-list">
-              @for (quickCity of quickCities; track quickCity) {
-                <button type="button" class="quick-chip" [class.quick-chip--active]="isSelectedCity(quickCity)" (click)="cercaRapida(quickCity)">{{ quickCity }}</button>
-              }
-            </div>
-          </section>
+          @if (showCityScrollHint) {
+            <button type="button" class="city-scroll-hint" aria-label="Mostra altre citt&agrave;" (click)="scrollCityList()">
+              <span>Scorri</span>
+              <span class="city-scroll-hint__arrow" aria-hidden="true">&#8595;</span>
+            </button>
+          }
         </div>
 
         <button type="button" class="legal-link" (click)="openInfoPanel()">Privacy, fonti e licenze</button>

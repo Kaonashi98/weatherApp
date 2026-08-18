@@ -700,12 +700,22 @@ button:disabled {
   font-weight: 800;
 }
 
-.city-lists {
-  align-content: start;
+.city-lists-wrap {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
   margin-top: 16px;
+}
+
+.city-lists {
+  align-content: start;
+  height: 100%;
   overflow: hidden auto;
+  transition: padding-bottom 180ms ease;
+}
+
+.city-lists--has-more {
+  padding-bottom: 44px;
 }
 
 .search-panel,
@@ -760,8 +770,41 @@ button:disabled {
   white-space: nowrap;
 }
 
-.search-panel--has-error .city-lists {
+.search-panel--has-error .city-lists-wrap {
   margin-top: 14px;
+}
+
+.city-scroll-hint {
+  position: absolute;
+  right: 10px;
+  bottom: 4px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  min-height: 34px;
+  padding: 5px 11px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+  font-size: 12px;
+  font-weight: 900;
+  animation: scroll-hint-pulse 1.7s ease-in-out infinite;
+}
+
+.city-scroll-hint:hover,
+.city-scroll-hint:focus-visible {
+  border-color: rgba(37, 99, 235, 0.52);
+  background: #eff6ff;
+  outline: 2px solid rgba(37, 99, 235, 0.2);
+}
+
+.city-scroll-hint__arrow {
+  font-size: 17px;
+  line-height: 1;
 }
 
 .search-panel--has-error .quick-chip {
@@ -1084,6 +1127,11 @@ button:disabled {
   to { opacity: 1; }
 }
 
+@keyframes scroll-hint-pulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
 @media (max-height: 760px) {
   .weather-shell {
     height: 100%;
@@ -1257,9 +1305,13 @@ button:disabled {
     overflow: visible;
   }
 
-  .city-lists {
+  .city-lists-wrap {
     flex: 1 1 auto;
     min-height: 0;
+  }
+
+  .city-lists {
+    height: 100%;
     overflow: hidden auto;
   }
 
