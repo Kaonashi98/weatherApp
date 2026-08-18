@@ -708,6 +708,22 @@ button:disabled {
   overflow: hidden auto;
 }
 
+.search-panel,
+.weather-card,
+.city-lists,
+.recent-list,
+.info-dialog {
+  scrollbar-width: none;
+}
+
+.search-panel::-webkit-scrollbar,
+.weather-card::-webkit-scrollbar,
+.city-lists::-webkit-scrollbar,
+.recent-list::-webkit-scrollbar,
+.info-dialog::-webkit-scrollbar {
+  display: none;
+}
+
 .city-section + .city-section {
   margin-top: 16px;
 }
@@ -1121,7 +1137,23 @@ button:disabled {
   }
 }
 
-@media (max-height: 760px) and (min-width: 621px) { :host { overflow: auto; } .page { align-items: start; height: auto; overflow: visible; } .weather-shell { height: auto; transform: none; overflow: visible; } .content-grid, .search-panel, .weather-card { overflow: visible; } }
+@media (max-height: 760px) and (min-width: 621px) {
+  :host,
+  .page {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .page {
+    align-items: center;
+  }
+
+  .weather-shell {
+    height: calc(100dvh - 20px);
+    transform: none;
+    overflow: hidden;
+  }
+}
 @media (max-width: 1040px) {
   .weather-shell {
     width: min(780px, 100%);
@@ -1159,51 +1191,41 @@ button:disabled {
 @media (max-width: 1040px) and (orientation: portrait) {
   :host,
   .page {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  :host { overflow: auto; }
   .page { align-items: center; }
 
   .weather-shell {
-    height: auto;
+    height: calc(100dvh - 20px);
     transform: none;
-    overflow: visible;
+    overflow: hidden;
   }
-
-  .content-grid,
-  .search-panel,
-  .weather-card,
-  .quick-list,
-  .city-lists { overflow: visible; }
 }
 @media (max-width: 620px) {
   :host {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: auto;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .page {
-    align-items: start;
-    min-height: 100vh;
-    min-height: 100dvh;
-    height: auto;
+    align-items: center;
+    min-height: 0;
+    height: 100dvh;
     padding: 10px;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .weather-shell {
-    height: auto;
-    min-height: calc(100dvh - 20px);
+    height: calc(100dvh - 20px);
+    min-height: 0;
     padding: 12px;
     border-radius: 22px;
     transform: translateY(0);
-    overflow: visible;
+    overflow: hidden;
   }
 
   .shell-header {
@@ -1218,8 +1240,11 @@ button:disabled {
   .content-grid,
   .search-panel,
   .weather-card {
-    min-height: auto;
-    overflow: visible;
+    min-height: 0;
+  }
+
+  .search-panel {
+    overflow: hidden;
   }
 
   .weather-card:not(.weather-card--overlay-open):not(.weather-card--overlay-closing) {
@@ -1233,9 +1258,9 @@ button:disabled {
   }
 
   .city-lists {
-    flex: 0 0 auto;
-    max-height: none;
-    overflow: visible;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden auto;
   }
 
 
