@@ -23,29 +23,43 @@
         <p class="subtitle">Temperatura, vento, umidit&agrave; e condizioni attuali in pochi secondi.</p>
 
         <div class="search-box">
-          <label class="search-label" for="city">Citt&agrave;</label>
+          <div class="search-heading">
+            <label class="search-label" for="city">Citt&agrave;</label>
+            @if (isSearchFocused) {
+              <button type="button" class="keyboard-close" (mousedown)="$event.preventDefault()" (click)="dismissKeyboard()">
+                <span aria-hidden="true">&#9000;</span>
+                Chiudi
+              </button>
+            }
+          </div>
           <div class="search-row">
-            <input
-              id="city"
-              type="text"
-              placeholder="Roma, Milano, New York"
-              [ngModel]="city"
-              (ngModelChange)="onCityChange($event)"
-              (focus)="openSuggestions()"
-              (blur)="closeSuggestionsSoon()"
-              (keyup.enter)="getWeather()"
-              autocomplete="off"
-              role="combobox"
-              aria-autocomplete="list"
-              [attr.aria-expanded]="showSuggestions"
-            >
+            <div class="search-input-wrap">
+              <input
+                id="city"
+                type="text"
+                placeholder="Roma, Milano, New York"
+                [ngModel]="city"
+                (ngModelChange)="onCityChange($event)"
+                (focus)="openSuggestions()"
+                (blur)="closeSuggestionsSoon()"
+                (keyup.enter)="getWeather()"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                [attr.aria-expanded]="showSuggestions"
+                aria-controls="city-suggestions"
+              >
+              @if (city) {
+                <button type="button" class="clear-input" aria-label="Cancella testo" (mousedown)="$event.preventDefault()" (click)="clearCityInput()">&times;</button>
+              }
+            </div>
             <button type="button" (click)="getWeather()" [disabled]="isLoading">
               {{ isLoading ? 'Attendi...' : 'Cerca' }}
             </button>
           </div>
 
           @if (showSuggestions) {
-            <div class="suggestions" role="listbox" aria-label="Suggerimenti localit&agrave;">
+            <div id="city-suggestions" class="suggestions" role="listbox" aria-label="Suggerimenti localit&agrave;">
               @if (isSuggesting) {
                 <div class="suggestion-status">Ricerca localit&agrave;...</div>
               } @else {
@@ -69,11 +83,32 @@
           <div class="notice" role="alert">{{ errorMessage }}</div>
         }
 
-        <div class="quick-list" aria-label="Citt&agrave; principali">
-          @for (quickCity of quickCities; track quickCity) {
-            <button type="button" class="quick-chip" [class.quick-chip--active]="isSelectedCity(quickCity)" (click)="cercaRapida(quickCity)">{{ quickCity }}</button>
+        <div class="city-lists">
+          @if (recentCities.length) {
+            <section class="city-section" aria-label="Citt&agrave; recenti">
+              <div class="city-section-header">
+                <p class="panel-kicker">Recenti</p>
+                <button type="button" class="text-action text-action--danger" (click)="clearRecentCities()">Cancella</button>
+              </div>
+              <div class="recent-list">
+                @for (recentCity of recentCities; track recentCity) {
+                  <button type="button" class="quick-chip recent-chip" [class.quick-chip--active]="isSelectedCity(recentCity)" (click)="cercaRapida(recentCity)">{{ recentCity }}</button>
+                }
+              </div>
+            </section>
           }
+
+          <section class="city-section" aria-label="Citt&agrave; principali">
+            <p class="panel-kicker">Citt&agrave; suggerite</p>
+            <div class="quick-list">
+              @for (quickCity of quickCities; track quickCity) {
+                <button type="button" class="quick-chip" [class.quick-chip--active]="isSelectedCity(quickCity)" (click)="cercaRapida(quickCity)">{{ quickCity }}</button>
+              }
+            </div>
+          </section>
         </div>
+
+        <button type="button" class="legal-link" (click)="openInfoPanel()">Privacy, fonti e licenze</button>
       </section>
 
       <section class="weather-card" [class.weather-card--loading]="isLoading" [class.weather-card--overlay-open]="isWeatherPanelOpen" [class.weather-card--overlay-closing]="isWeatherPanelClosing" aria-label="Meteo attuale">
@@ -103,7 +138,7 @@
           <div class="weather-card__top">
             <div>
               <p class="label">Localit&agrave;</p>
-              <h2>{{ weatherData.city }}, {{ weatherData.country }}</h2>
+              <h2>{{ weatherData.locationLabel }}</h2>
             </div>
             <div class="condition">{{ weatherData.description }}</div>
           </div>
@@ -162,4 +197,29 @@
       </section>
     </div>
   </section>
+
+  @if (isInfoPanelOpen) {
+    <div class="info-backdrop" (click)="closeInfoPanel()">
+      <section class="info-dialog" role="dialog" aria-modal="true" aria-labelledby="info-title" (click)="$event.stopPropagation()">
+        <div class="info-dialog__header">
+          <div>
+            <p class="panel-kicker">WeatherApp</p>
+            <h2 id="info-title">Privacy, fonti e licenze</h2>
+          </div>
+          <button type="button" class="dialog-close" aria-label="Chiudi" (click)="closeInfoPanel()">&times;</button>
+        </div>
+
+        <p>WeatherApp &egrave; gratuita, senza pubblicit&agrave;, account, acquisti o sistemi di tracciamento. Le ultime cinque citt&agrave; vengono salvate soltanto in questo browser e possono essere eliminate con il comando &ldquo;Cancella&rdquo;.</p>
+        <p>Le ricerche e i dati meteo provengono da Open-Meteo; gli eventi di sole e luna provengono da MET Norway. Icone e immagini atmosferiche sono risorse locali.</p>
+
+        <div class="info-links">
+          <a href="/privacy.html">Informativa privacy</a>
+          <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer">Open-Meteo &middot; CC BY 4.0</a>
+          <a href="https://docs.api.met.no/doc/License.html" target="_blank" rel="noopener noreferrer">MET Norway &middot; NLOD 2.0 / CC BY 4.0</a>
+        </div>
+
+        <p class="info-contact">Assistenza e privacy: <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a></p>
+      </section>
+    </div>
+  }
 </main>

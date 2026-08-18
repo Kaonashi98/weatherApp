@@ -12,6 +12,8 @@ L'obiettivo era creare una piccola applicazione front-end completa, curata e pre
 
 - Ricerca meteo per città o località.
 - Suggerimenti automatici durante la digitazione.
+- Ultime cinque città salvate soltanto nel browser, senza doppioni e cancellabili dall'interfaccia.
+- Località omonime mantenute distinte e riaperte con il contesto geografico corretto.
 - Selezione rapida di città principali.
 - Temperatura attuale, umidità, vento e descrizione delle condizioni.
 - Ora locale della città cercata.
@@ -19,6 +21,8 @@ L'obiettivo era creare una piccola applicazione front-end completa, curata e pre
 - Orari di alba e tramonto della luna, quando disponibili.
 - Icone meteo giorno/notte coerenti con la condizione attuale.
 - Messaggi di errore per ricerche non valide o località non trovate.
+- Messaggi distinti per connessione assente, servizio non disponibile e località non trovata.
+- Meteo principale disponibile anche se il servizio astronomico è temporaneamente irraggiungibile.
 - Stato di caricamento con skeleton UI.
 - Layout responsive per desktop, tablet e smartphone.
 - Pannello mobile dedicato per consultare il meteo senza perdere la ricerca.

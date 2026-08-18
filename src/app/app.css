@@ -530,10 +530,65 @@ p {
   gap: 7px;
 }
 
+.search-heading,
+.city-section-header,
+.info-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.keyboard-close,
+.text-action {
+  min-height: 28px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #b42318;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+}
+
 .search-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 116px;
   gap: 10px;
+}
+
+.search-input-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.search-input-wrap input {
+  padding-right: 48px;
+}
+
+.clear-input {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  color: #475467;
+  background: transparent;
+  box-shadow: none;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.clear-input:hover,
+.clear-input:focus-visible,
+.keyboard-close:hover,
+.keyboard-close:focus-visible,
+.text-action:hover,
+.text-action:focus-visible {
+  background: rgba(180, 35, 24, 0.08);
+  outline: 2px solid rgba(180, 35, 24, 0.22);
 }
 
 input,
@@ -645,19 +700,51 @@ button:disabled {
   font-weight: 800;
 }
 
-.quick-list {
+.city-lists {
   align-content: start;
-  display: flex;
   flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 7px;
   min-height: 0;
   margin-top: 16px;
   overflow: hidden auto;
 }
 
-.search-panel--has-error .quick-list {
-  gap: 6px;
+.city-section + .city-section {
+  margin-top: 16px;
+}
+
+.city-section > .panel-kicker,
+.city-section-header .panel-kicker {
+  margin: 0 0 7px;
+}
+
+.city-section-header .panel-kicker {
+  margin-bottom: 0;
+}
+
+.quick-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.recent-list {
+  display: flex;
+  gap: 7px;
+  margin-top: 7px;
+  padding-bottom: 3px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.recent-chip {
+  max-width: 280px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-panel--has-error .city-lists {
   margin-top: 14px;
 }
 
@@ -682,6 +769,90 @@ button:disabled {
   color: #0f172a;
   background: #dbeafe;
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.legal-link {
+  align-self: flex-start;
+  min-height: 30px;
+  margin-top: 12px;
+  padding: 4px 2px;
+  border-radius: 6px;
+  color: #475467;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-link:hover,
+.legal-link:focus-visible {
+  color: #1d4ed8;
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+}
+
+.info-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.58);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.info-dialog {
+  width: min(620px, 100%);
+  max-height: min(760px, calc(100dvh - 36px));
+  padding: clamp(22px, 4vw, 34px);
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 26px;
+  color: #344054;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.35);
+}
+
+.info-dialog h2 {
+  margin: 6px 0 0;
+  color: #101828;
+  font-size: clamp(25px, 5vw, 36px);
+  line-height: 1;
+}
+
+.info-dialog p {
+  line-height: 1.6;
+}
+
+.dialog-close {
+  flex: 0 0 auto;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  color: #b42318;
+  background: #fef3f2;
+  box-shadow: none;
+  font-size: 27px;
+}
+
+.info-links {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.info-links a,
+.info-contact a {
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+.info-contact {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
 }
 
 .weather-card {
@@ -1006,7 +1177,8 @@ button:disabled {
   .content-grid,
   .search-panel,
   .weather-card,
-  .quick-list { overflow: visible; }
+  .quick-list,
+  .city-lists { overflow: visible; }
 }
 @media (max-width: 620px) {
   :host {
@@ -1055,6 +1227,12 @@ button:disabled {
   }
 
   .quick-list {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .city-lists {
     flex: 0 0 auto;
     max-height: none;
     overflow: visible;
@@ -1225,6 +1403,16 @@ button:disabled {
   input,
   button {
     min-height: 46px;
+  }
+
+  .clear-input {
+    min-height: 36px;
+  }
+
+  .keyboard-close,
+  .text-action,
+  .legal-link {
+    min-height: 34px;
   }
 }
 .weather-card--loading {

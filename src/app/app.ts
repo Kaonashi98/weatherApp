@@ -1,8 +1,16 @@
-import { Component, HostBinding, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Subscription, timer } from 'rxjs';
-import { CitySuggestion, WeatherService, WeatherViewModel } from './services/weather';
+import {
+  CitySuggestion,
+  WeatherConnectionError,
+  WeatherNotFoundError,
+  WeatherService,
+  WeatherServiceError,
+  WeatherViewModel
+} from './services/weather';
+import { RecentCitiesService } from './services/recent-cities';
 
 @Component({
   selector: 'app-root',
@@ -49,6 +57,7 @@ export class AppComponent implements OnDestroy {
 
   city = '';
   weatherData: WeatherViewModel | null = null;
+  recentCities: string[] = [];
   suggestions: CitySuggestion[] = [];
   selectedSuggestion: CitySuggestion | null = null;
   isLoading = false;
@@ -57,6 +66,8 @@ export class AppComponent implements OnDestroy {
   errorMessage = '';
   isWeatherPanelOpen = false;
   isWeatherPanelClosing = false;
+  isSearchFocused = false;
+  isInfoPanelOpen = false;
 
   private searchSubscription: Subscription | null = null;
   private suggestionSubscription: Subscription | null = null;
@@ -64,6 +75,7 @@ export class AppComponent implements OnDestroy {
   private closeSuggestionsTimer: ReturnType<typeof setTimeout> | null = null;
   private clockTimer: ReturnType<typeof setInterval> | null = null;
   private weatherPanelCloseTimer: ReturnType<typeof setTimeout> | null = null;
+  private weatherRequestId = 0;
 
   @HostBinding('class')
   get themeClass(): string {
@@ -75,9 +87,15 @@ export class AppComponent implements OnDestroy {
     return this.weatherData ? `${this.getSolarOrbTop(this.weatherData)}vh` : null;
   }
 
-  constructor(private readonly weatherService: WeatherService) {}
+  constructor(
+    private readonly weatherService: WeatherService,
+    private readonly recentCitiesService: RecentCitiesService
+  ) {
+    this.recentCities = this.recentCitiesService.load();
+  }
 
   ngOnDestroy(): void {
+    this.weatherRequestId++;
     this.searchSubscription?.unsubscribe();
     this.suggestionSubscription?.unsubscribe();
     this.clearSuggestionTimer();
@@ -117,6 +135,7 @@ export class AppComponent implements OnDestroy {
     this.isLoading = true;
     this.openWeatherPanel();
     this.errorMessage = '';
+    const requestId = ++this.weatherRequestId;
 
     const selectedSuggestion = this.selectedSuggestion?.label === city ? this.selectedSuggestion : null;
     const weatherRequest = selectedSuggestion
@@ -128,23 +147,33 @@ export class AppComponent implements OnDestroy {
       delay: timer(1000)
     }).subscribe({
       next: ({ data }) => {
+        if (requestId !== this.weatherRequestId) return;
         this.weatherData = data;
+        this.city = data.locationLabel;
+        this.recentCities = this.recentCitiesService.remember(data.locationLabel);
         this.isLoading = false;
         this.searchSubscription = null;
         this.startLocalClock();
       },
-      error: () => {
+      error: (error: unknown) => {
+        if (requestId !== this.weatherRequestId) return;
         this.weatherData = null;
         this.isLoading = false;
         this.searchSubscription = null;
         this.stopLocalClock();
         this.closeWeatherPanelNow();
-        this.errorMessage = 'Citt\u00e0 non trovata. Controlla il nome oppure prova con un nome pi\u00f9 specifico.';
+        this.errorMessage = this.getWeatherErrorMessage(error);
       }
     });
   }
 
   onCityChange(value: string): void {
+    if (this.isLoading) {
+      this.weatherRequestId++;
+      this.searchSubscription?.unsubscribe();
+      this.searchSubscription = null;
+      this.isLoading = false;
+    }
     this.city = value;
     this.selectedSuggestion = null;
     this.errorMessage = '';
@@ -154,6 +183,7 @@ export class AppComponent implements OnDestroy {
 
   openSuggestions(): void {
     this.clearCloseSuggestionsTimer();
+    this.isSearchFocused = true;
     this.showSuggestions = this.suggestions.length > 0 || this.isSuggesting;
   }
 
@@ -161,6 +191,7 @@ export class AppComponent implements OnDestroy {
     this.clearCloseSuggestionsTimer();
     this.closeSuggestionsTimer = setTimeout(() => {
       this.showSuggestions = false;
+      this.isSearchFocused = false;
       this.closeSuggestionsTimer = null;
     }, 120);
   }
@@ -183,7 +214,9 @@ export class AppComponent implements OnDestroy {
   }
 
   isSelectedCity(city: string): boolean {
-    return this.normalizeCity(this.city.split(',')[0]) === this.normalizeCity(city);
+    const current = this.normalizeCity(this.city);
+    const candidate = this.normalizeCity(city);
+    return current === candidate || this.normalizeCity(this.city.split(',')[0]) === candidate;
   }
 
   showSearchPanel(): void {
@@ -207,6 +240,61 @@ export class AppComponent implements OnDestroy {
     this.showSuggestions = false;
     this.errorMessage = '';
     this.getWeather();
+  }
+
+  clearCityInput(): void {
+    this.weatherRequestId++;
+    this.searchSubscription?.unsubscribe();
+    this.suggestionSubscription?.unsubscribe();
+    this.clearSuggestionTimer();
+    this.clearCloseSuggestionsTimer();
+    this.searchSubscription = null;
+    this.suggestionSubscription = null;
+    this.city = '';
+    this.selectedSuggestion = null;
+    this.suggestions = [];
+    this.showSuggestions = false;
+    this.isSuggesting = false;
+    this.isLoading = false;
+    this.errorMessage = '';
+    this.weatherData = null;
+    this.closeWeatherPanelNow();
+    this.stopLocalClock();
+  }
+
+  dismissKeyboard(): void {
+    const activeElement = typeof document === 'undefined' ? null : document.activeElement;
+    if (activeElement instanceof HTMLElement) activeElement.blur();
+    this.isSearchFocused = false;
+    this.showSuggestions = false;
+  }
+
+  clearRecentCities(): void {
+    this.recentCitiesService.clear();
+    this.recentCities = [];
+  }
+
+  openInfoPanel(): void {
+    this.isInfoPanelOpen = true;
+  }
+
+  closeInfoPanel(): void {
+    this.isInfoPanelOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isInfoPanelOpen) this.closeInfoPanel();
+  }
+
+  @HostListener('document:visibilitychange')
+  onVisibilityChange(): void {
+    if (typeof document !== 'undefined' && document.hidden) {
+      this.stopLocalClock();
+    } else if (this.weatherData) {
+      this.weatherData = this.weatherService.refreshLiveFields(this.weatherData);
+      this.startLocalClock();
+    }
   }
 
   private openWeatherPanel(): void {
@@ -253,11 +341,14 @@ export class AppComponent implements OnDestroy {
           this.isSuggesting = false;
           this.suggestionSubscription = null;
         },
-        error: () => {
+        error: (error: unknown) => {
           this.suggestions = [];
           this.isSuggesting = false;
           this.showSuggestions = false;
           this.suggestionSubscription = null;
+          if (error instanceof WeatherConnectionError) {
+            this.errorMessage = 'Connessione assente. Controlla la rete e riprova.';
+          }
         }
       });
       this.suggestionTimer = null;
@@ -309,6 +400,19 @@ export class AppComponent implements OnDestroy {
     }
 
     return weather.theme.includes('night') ? 7 : 18;
+  }
+
+  private getWeatherErrorMessage(error: unknown): string {
+    if (error instanceof WeatherConnectionError) {
+      return 'Connessione assente. Controlla la rete e riprova.';
+    }
+    if (error instanceof WeatherServiceError) {
+      return 'Il servizio meteo non \u00e8 disponibile. Riprova tra poco.';
+    }
+    if (error instanceof WeatherNotFoundError) {
+      return 'Citt\u00e0 non trovata. Controlla il nome oppure prova con un nome pi\u00f9 specifico.';
+    }
+    return 'Non \u00e8 stato possibile aggiornare il meteo. Riprova tra poco.';
   }
 
   private getLocalIso(timeZone: string): string {
