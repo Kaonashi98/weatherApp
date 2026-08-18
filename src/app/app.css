@@ -539,7 +539,6 @@ p {
   gap: 12px;
 }
 
-.keyboard-close,
 .text-action {
   min-height: 28px;
   padding: 3px 8px;
@@ -583,8 +582,6 @@ p {
 
 .clear-input:hover,
 .clear-input:focus-visible,
-.keyboard-close:hover,
-.keyboard-close:focus-visible,
 .text-action:hover,
 .text-action:focus-visible {
   background: rgba(180, 35, 24, 0.08);
@@ -1446,7 +1443,6 @@ button:disabled {
     min-height: 36px;
   }
 
-  .keyboard-close,
   .text-action,
   .legal-link {
     min-height: 34px;

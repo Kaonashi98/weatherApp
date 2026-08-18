@@ -25,12 +25,6 @@
         <div class="search-box">
           <div class="search-heading">
             <label class="search-label" for="city">Citt&agrave;</label>
-            @if (isSearchFocused) {
-              <button type="button" class="keyboard-close" (mousedown)="$event.preventDefault()" (click)="dismissKeyboard()">
-                <span aria-hidden="true">&#9000;</span>
-                Chiudi
-              </button>
-            }
           </div>
           <div class="search-row">
             <div class="search-input-wrap">

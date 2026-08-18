@@ -66,7 +66,6 @@ export class AppComponent implements OnDestroy {
   errorMessage = '';
   isWeatherPanelOpen = false;
   isWeatherPanelClosing = false;
-  isSearchFocused = false;
   isInfoPanelOpen = false;
 
   private searchSubscription: Subscription | null = null;
@@ -183,7 +182,6 @@ export class AppComponent implements OnDestroy {
 
   openSuggestions(): void {
     this.clearCloseSuggestionsTimer();
-    this.isSearchFocused = true;
     this.showSuggestions = this.suggestions.length > 0 || this.isSuggesting;
   }
 
@@ -191,7 +189,6 @@ export class AppComponent implements OnDestroy {
     this.clearCloseSuggestionsTimer();
     this.closeSuggestionsTimer = setTimeout(() => {
       this.showSuggestions = false;
-      this.isSearchFocused = false;
       this.closeSuggestionsTimer = null;
     }, 120);
   }
@@ -260,13 +257,6 @@ export class AppComponent implements OnDestroy {
     this.weatherData = null;
     this.closeWeatherPanelNow();
     this.stopLocalClock();
-  }
-
-  dismissKeyboard(): void {
-    const activeElement = typeof document === 'undefined' ? null : document.activeElement;
-    if (activeElement instanceof HTMLElement) activeElement.blur();
-    this.isSearchFocused = false;
-    this.showSuggestions = false;
   }
 
   clearRecentCities(): void {
