@@ -422,7 +422,7 @@
   grid-template-rows: auto minmax(0, 1fr);
   gap: clamp(10px, 1.3vw, 18px);
   width: min(1240px, 100%);
-  height: min(780px, calc(100dvh - clamp(20px, 3.6vw, 48px)));
+  height: min(780px, 100%);
   padding: clamp(16px, 1.9vw, 24px);
   border: 1px solid rgba(255, 255, 255, 0.36);
   border-radius: clamp(22px, 2.2vw, 30px);
@@ -430,7 +430,7 @@
   box-shadow: var(--shadow);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  transform: translateY(-24px);
+  transform: none;
   overflow: hidden;
 }
 
@@ -1086,9 +1086,9 @@ button:disabled {
 
 @media (max-height: 760px) {
   .weather-shell {
-    height: calc(100dvh - 20px);
+    height: 100%;
     padding: 14px;
-    transform: translateY(-14px);
+    transform: none;
   }
 
   .shell-header {
@@ -1149,7 +1149,7 @@ button:disabled {
   }
 
   .weather-shell {
-    height: calc(100dvh - 20px);
+    height: 100%;
     transform: none;
     overflow: hidden;
   }
@@ -1199,7 +1199,7 @@ button:disabled {
   .page { align-items: center; }
 
   .weather-shell {
-    height: calc(100dvh - 20px);
+    height: 100%;
     transform: none;
     overflow: hidden;
   }
@@ -1220,7 +1220,7 @@ button:disabled {
   }
 
   .weather-shell {
-    height: calc(100dvh - 20px);
+    height: 100%;
     min-height: 0;
     padding: 12px;
     border-radius: 22px;
