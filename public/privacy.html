@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Informativa sulla privacy dell'app WeatherApp di Nicola Zingaro.">
-  <title>Privacy Policy | WeatherApp</title>
+  <meta name="description" content="Informativa sulla privacy del sito e dell'app Android WeatherApp di Nicola Zingaro.">
+  <title>Informativa sulla privacy | WeatherApp</title>
   <style>
     :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #172033; background: #eaf5ff; }
     * { box-sizing: border-box; }
@@ -17,51 +17,122 @@
     .eyebrow { margin: 0 0 .5rem; color: #2563eb; font-size: .8rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
     .updated { margin: .75rem 0 2rem; color: #64748b; }
     .contact { padding: 1rem 1.25rem; border-radius: 16px; background: #eff6ff; }
+    .language-picker { display: flex; flex-wrap: wrap; gap: .65rem; margin: 0 0 1.5rem; }
+    .language-picker button { appearance: none; border: 1px solid #93c5fd; border-radius: 999px; padding: .55rem 1rem; color: #1e3a8a; background: #eff6ff; font: inherit; font-weight: 800; cursor: pointer; }
+    .language-picker button[aria-pressed="true"] { color: #fff; background: #2563eb; }
+    .language-panel[hidden] { display: none; }
     footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #dbe4ef; color: #64748b; }
   </style>
 </head>
 <body>
   <main>
     <p class="eyebrow">WeatherApp</p>
+    <nav class="language-picker" aria-label="Language / Lingua">
+      <button id="show-it" type="button" aria-pressed="true">Italiano</button>
+      <button id="show-en" type="button" aria-pressed="false">English</button>
+    </nav>
+    <section id="privacy-it" class="language-panel" lang="it">
     <h1>Informativa sulla privacy</h1>
-    <p class="updated">Ultimo aggiornamento: 18 agosto 2026</p>
+    <p class="updated">Ultimo aggiornamento: 22 agosto 2026</p>
 
-    <p>Questa informativa riguarda il sito <strong>weather-app-blond-six-70.vercel.app</strong> e l'applicazione Android <strong>WeatherApp</strong>. Le sezioni su fornitori esterni, sicurezza e diritti valgono per entrambi. Sia il sito sia l'app memorizzano localmente le ultime città cercate per offrire l'elenco Recenti.</p>
+    <p>Questa informativa riguarda il sito <a href="https://weather-app-blond-six-70.vercel.app/">WeatherApp</a> e l'applicazione Android WeatherApp. <strong>La webapp non salva le località cercate né nel browser né in un database; soltanto l'app Android conserva sul dispositivo le ultime cinque località e i Preferiti</strong>.</p>
 
     <h2>Titolare e contatti</h2>
     <p class="contact">WeatherApp è fornita da <strong>Nicola Zingaro</strong>.<br>Email privacy e assistenza: <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a>.</p>
 
     <h2>Dati trattati e finalità</h2>
-    <p>WeatherApp non richiede account, non contiene pubblicità, non prevede acquisti in-app e non integra sistemi di analytics o tracciamento. Quando cerchi una località, il testo della ricerca viene inviato a Open-Meteo; le coordinate della località selezionata vengono inviate a Open-Meteo per il meteo e a MET Norway per gli eventi di sole e luna. Le icone e le immagini atmosferiche sono risorse locali del sito e dell'app e non generano richieste verso fornitori esterni. Open-Meteo e MET Norway ricevono inoltre l'indirizzo IP e le informazioni tecniche necessarie alla connessione.</p>
-    <p>I dati inviati ai fornitori sono usati soltanto per fornire il risultato richiesto. Nel sito e nell'app Android, le ultime cinque città cercate vengono memorizzate localmente nel browser o sul dispositivo per mostrare l'elenco Recenti. Questa cronologia non viene inviata a Nicola Zingaro, non viene sincronizzata tra dispositivi e può essere cancellata in qualsiasi momento tramite il comando “Cancella”. WeatherApp non gestisce un database di utenti e non accede alla posizione GPS del dispositivo.</p>
+    <p>WeatherApp non richiede account, non contiene pubblicità, non prevede acquisti in-app, non effettua profilazione e non integra sistemi di analytics o tracciamento.</p>
+    <p>Quando l'utente cerca una località, il testo della ricerca viene inviato a Open-Meteo per individuare la località. Le coordinate della località scelta vengono inviate a Open-Meteo per ottenere le condizioni meteorologiche e a MET Norway per ottenere gli eventi astronomici relativi a sole e luna. I fornitori ricevono necessariamente anche l'indirizzo IP e le informazioni tecniche della connessione.</p>
+    <p>I dati sono trattati esclusivamente per fornire la funzione richiesta. Nell'app Android, le ultime cinque località cercate vengono conservate soltanto sul dispositivo per mostrare l'elenco Recenti e possono essere eliminate in qualsiasi momento con il comando <strong>Cancella</strong>. Le città aggiunte volontariamente ai Preferiti e la lingua scelta nelle Impostazioni restano anch'esse soltanto sul dispositivo. I preferiti possono essere rimossi con il pulsante a stella. Backup cloud e trasferimento di questi dati verso un altro dispositivo sono disabilitati nella configurazione Android. WeatherApp non gestisce un database di utenti e non accede alla posizione GPS del dispositivo.</p>
 
-    <h2>Cookie e memoria locale</h2>
-    <p>Il sito non usa cookie. Conserva nel localStorage del browser soltanto le ultime cinque città cercate; l'app Android conserva lo stesso elenco soltanto sul dispositivo. In entrambi i casi la cronologia resta locale e può essere cancellata dall'interfaccia.</p>
+    <h2>Sito, cookie e memoria locale</h2>
+    <p>La webapp non imposta cookie, non memorizza le ricerche nel browser e non salva una cronologia in un database WeatherApp. Il sito e questa pagina sono ospitati da Vercel: quando vengono visitati, Vercel può trattare indirizzo IP, città e Paese derivati dall'IP, dati tecnici del dispositivo e informazioni di log per erogare, proteggere e diagnosticare il servizio, secondo la propria informativa. Soltanto l'app Android conserva sul dispositivo le ultime cinque città cercate, le città aggiunte volontariamente ai Preferiti e la preferenza della lingua. La cronologia resta sul dispositivo finché l'utente non la cancella dall'app; i preferiti possono essere rimossi singolarmente con il pulsante a stella. Tutti questi valori vengono eliminati cancellando i dati dell'app o disinstallando l'applicazione e non vengono sincronizzati tra dispositivi.</p>
 
     <h2>Fornitori esterni</h2>
     <ul>
       <li><a href="https://open-meteo.com/en/terms">Open-Meteo GmbH</a>: meteo e geocodifica, dati con attribuzione CC BY 4.0.</li>
-      <li><a href="https://docs.api.met.no/doc/License.html">MET Norway</a>: eventi astronomici, dati con attribuzione NLOD 2.0/CC BY 4.0.</li>
-      <li><a href="https://www.geonames.org/">GeoNames</a>: fonte dei dati di località usati dalla geocodifica.</li>
+      <li><a href="https://docs.api.met.no/doc/License.html">MET Norway</a>: eventi astronomici, dati NLOD 2.0/CC BY 4.0.</li>
+      <li><a href="https://www.geonames.org/">GeoNames</a>: fonte dei dati di località usati dal servizio di geocodifica.</li>
+      <li><a href="https://vercel.com/legal/privacy-notice">Vercel Inc.</a>: hosting del sito e della pagina privacy.</li>
     </ul>
-    <p>Open-Meteo dichiara che i log tecnici del servizio gratuito, che possono includere IP e coordinate, vengono eliminati dopo 90 giorni. MET Norway dichiara che le richieste dirette possono registrare IP e coordinate nei propri log in Norvegia. Tempi e modalità sono disciplinati dalle informative dei rispettivi fornitori.</p>
+    <p>Open-Meteo dichiara che i log tecnici del servizio gratuito, che possono includere IP e coordinate, vengono eliminati dopo 90 giorni. MET Norway dichiara che le richieste dirette possono registrare IP e coordinate nei propri log in Norvegia. WeatherApp non controlla tali log né può cancellarli direttamente; tempi, modalità e diritti relativi ai dati detenuti dai fornitori sono disciplinati dalle rispettive informative.</p>
 
     <h2>Base giuridica, conservazione e condivisione</h2>
-    <p>Il trattamento è necessario per eseguire la richiesta dell'utente. WeatherApp non vende dati e non li condivide per pubblicità. I dati vengono comunicati solo ai fornitori indicati per ottenere il risultato richiesto; la conservazione dei loro log tecnici dipende dalle rispettive policy. La cronologia locale resta nel browser o sul dispositivo finché l'utente non la cancella dall'interfaccia, elimina i dati del sito o dell'app, oppure disinstalla l'applicazione.</p>
+    <p>Il trattamento è necessario per eseguire la richiesta dell'utente e fornire la funzionalità meteo. WeatherApp non vende dati e non li condivide per pubblicità. I dati vengono comunicati soltanto ai fornitori indicati per ottenere i risultati richiesti. La conservazione dei log tecnici dipende dai fornitori.</p>
 
     <h2>Sicurezza</h2>
-    <p>Tutte le comunicazioni del sito e dell'app utilizzano HTTPS. Nessun sistema può tuttavia garantire sicurezza o disponibilità assolute.</p>
+    <p>Tutte le comunicazioni effettuate dal sito e dall'app utilizzano HTTPS. Nessun sistema può tuttavia garantire sicurezza o disponibilità assolute.</p>
 
     <h2>Diritti dell'utente</h2>
-    <p>Per richieste relative ai dati o a questa informativa scrivi a <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a>. Poiché WeatherApp non crea account e la cronologia delle città resta soltanto nel browser o sul dispositivo dell'utente, Nicola Zingaro non può consultarla o associarla a una singola persona. Per i dati conservati dai fornitori si applicano anche le loro procedure privacy.</p>
+    <p>Per richieste relative ai dati o a questa informativa scrivi a <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a>. Poiché WeatherApp non crea account e cronologia e preferiti restano soltanto sul dispositivo, Nicola Zingaro non può consultarli o associarli a una singola persona. Per i dati conservati dai fornitori si applicano anche le rispettive procedure privacy.</p>
 
     <h2>Minori</h2>
     <p>WeatherApp è un servizio informativo generale e non è progettata specificamente per bambini. Non raccoglie consapevolmente dati di minori oltre ai dati tecnici necessari a rispondere a una ricerca.</p>
 
     <h2>Modifiche</h2>
-    <p>Questa informativa può essere aggiornata quando cambiano l'app, i fornitori o gli obblighi normativi. La data dell'ultima revisione è indicata in alto.</p>
+    <p>Questa informativa può essere aggiornata quando cambiano l'app, i fornitori o gli obblighi normativi. La data dell'ultima revisione è indicata all'inizio del documento.</p>
+    </section>
 
-    <footer><a href="/">Torna a WeatherApp</a></footer>
+    <section id="privacy-en" class="language-panel" lang="en" hidden>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: August 22, 2026</p>
+
+      <p>This policy covers the <a href="https://weather-app-blond-six-70.vercel.app/">WeatherApp website</a> and the WeatherApp Android application. <strong>The web app does not save searched places in the browser or in a database; only the Android app stores the five most recent places and Favorites on the device.</strong></p>
+
+      <h2>Data controller and contact details</h2>
+      <p class="contact">WeatherApp is provided by <strong>Nicola Zingaro</strong>.<br>Privacy and support email: <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a>.</p>
+
+      <h2>Data processed and purposes</h2>
+      <p>WeatherApp does not require an account, contain advertising, offer in-app purchases, perform profiling, or integrate analytics or tracking systems.</p>
+      <p>When a user searches for a place, the search text is sent to Open-Meteo to identify the place. The selected coordinates are sent to Open-Meteo to retrieve weather conditions and to MET Norway to retrieve sun and moon events. These providers necessarily receive the IP address and technical connection information.</p>
+      <p>The data is processed solely to provide the requested feature. In the Android app, the five most recent searches, voluntarily selected Favorites and the language preference are stored only on the device. Recent history can be cleared in the app and favorites can be removed with the star button. Cloud backup and transfer of these values to another device are disabled in the Android configuration. WeatherApp does not maintain a user database and does not access the device GPS location.</p>
+
+      <h2>Website, cookies and local storage</h2>
+      <p>The web app does not set cookies, store searches in the browser, or save search history in a WeatherApp database. The website and this page are hosted by Vercel, which may process IP addresses, approximate location, device technical data and logs to deliver, protect and diagnose the service under its own privacy policy. Device-only values are deleted by clearing app data or uninstalling the app and are not synchronized between devices.</p>
+
+      <h2>External providers</h2>
+      <ul>
+        <li><a href="https://open-meteo.com/en/terms">Open-Meteo GmbH</a>: weather and geocoding, data attributed under CC BY 4.0.</li>
+        <li><a href="https://docs.api.met.no/doc/License.html">MET Norway</a>: astronomical events, NLOD 2.0/CC BY 4.0 data.</li>
+        <li><a href="https://www.geonames.org/">GeoNames</a>: source of location data used by the geocoding service.</li>
+        <li><a href="https://vercel.com/legal/privacy-notice">Vercel Inc.</a>: website and privacy-page hosting.</li>
+      </ul>
+      <p>Open-Meteo states that technical logs for its free service, which may include IP addresses and coordinates, are deleted after 90 days. MET Norway states that direct requests may record IP addresses and coordinates in its logs in Norway. WeatherApp does not control or directly delete provider logs; their respective policies govern retention and user rights.</p>
+
+      <h2>Legal basis, retention and sharing</h2>
+      <p>Processing is necessary to perform the user's request and provide the weather feature. WeatherApp does not sell data or share it for advertising. Data is sent only to the listed providers to obtain the requested results. Technical-log retention depends on those providers.</p>
+
+      <h2>Security</h2>
+      <p>All communications made by the website and app use HTTPS. However, no system can guarantee absolute security or availability.</p>
+
+      <h2>User rights</h2>
+      <p>For questions about data or this policy, contact <a href="mailto:weatherapp.help@outlook.com">weatherapp.help@outlook.com</a>. Because WeatherApp does not create accounts and recent history, favorites and language preferences remain only on the user's device, Nicola Zingaro cannot view or associate them with an individual. Provider procedures also apply to data retained by those providers.</p>
+
+      <h2>Children</h2>
+      <p>WeatherApp is a general information service and is not specifically designed for children. It does not knowingly collect children's data beyond the technical data needed to answer a search.</p>
+
+      <h2>Changes</h2>
+      <p>This policy may be updated when the app, providers or legal requirements change. The latest revision date is shown at the beginning of this document.</p>
+    </section>
+
+    <footer><a href="https://weather-app-blond-six-70.vercel.app/">Torna a WeatherApp</a></footer>
   </main>
+  <script>
+    const italianPanel = document.getElementById('privacy-it');
+    const englishPanel = document.getElementById('privacy-en');
+    const italianButton = document.getElementById('show-it');
+    const englishButton = document.getElementById('show-en');
+    function showLanguage(language) {
+      const english = language === 'en';
+      italianPanel.hidden = english;
+      englishPanel.hidden = !english;
+      italianButton.setAttribute('aria-pressed', String(!english));
+      englishButton.setAttribute('aria-pressed', String(english));
+      document.documentElement.lang = english ? 'en' : 'it';
+    }
+    italianButton.addEventListener('click', () => showLanguage('it'));
+    englishButton.addEventListener('click', () => showLanguage('en'));
+    if ((navigator.language || '').toLowerCase().startsWith('en')) showLanguage('en');
+  </script>
 </body>
 </html>
