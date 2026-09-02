@@ -6,6 +6,7 @@ import { AppComponent } from './app';
 describe('AppComponent', () => {
   beforeEach(async () => {
     localStorage.clear();
+    localStorage.setItem('weatherapp_language_v2', 'it');
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideHttpClient(), provideHttpClientTesting()]
@@ -24,7 +25,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('Controlla il meteo attuale');
+    expect(compiled.textContent).toContain('Controlla il meteo della tua città');
   });
 
   it('mostra un messaggio di validazione quando la citta e vuota', () => {
