@@ -1,9 +1,6 @@
 <main class="page">
   <div class="weather-scene" aria-hidden="true">
     <span class="sun-or-moon"></span><span class="sun-rays"></span>
-    <span class="rain-layer rain-layer--back"></span><span class="rain-layer rain-layer--front"></span>
-    <span class="snow-layer"></span><span class="fog-layer"></span><span class="storm-flash"></span>
-    <span class="lightning lightning--one"></span><span class="lightning lightning--two"></span><span class="stars"></span>
     <app-weather-scene-effects
       [theme]="weatherData?.theme ?? 'default'"
       [cloudCover]="weatherData?.cloudCover ?? 0"
