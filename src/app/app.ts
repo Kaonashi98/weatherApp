@@ -9,6 +9,7 @@ import {
   WeatherService, WeatherServiceError, WeatherViewModel
 } from './services/weather';
 import { RecentCitiesService } from './services/recent-cities';
+import { WeatherSceneEffectsComponent } from './weather-scene-effects';
 
 type WeatherView = 'now' | 'forecast';
 type LabelKey = keyof typeof LABELS;
@@ -35,7 +36,7 @@ const LABELS = {
   sourceCopy: ['Ricerche, dati meteo, previsioni ed eventi di sole e luna provengono da Open-Meteo. Icone e immagini atmosferiche sono risorse locali.', 'Search, weather data, forecasts and sun and moon events come from Open-Meteo. Icons and atmospheric images are local assets.']
 } as const;
 
-@Component({ selector: 'app-root', standalone: true, imports: [CommonModule, FormsModule], templateUrl: './app.html', styleUrl: './app.css', changeDetection: ChangeDetectionStrategy.Eager })
+@Component({ selector: 'app-root', standalone: true, imports: [CommonModule, FormsModule, WeatherSceneEffectsComponent], templateUrl: './app.html', styleUrl: './app.css', changeDetection: ChangeDetectionStrategy.Eager })
 export class AppComponent implements OnDestroy {
   city = '';
   weatherData: WeatherViewModel | null = null;
@@ -80,7 +81,9 @@ export class AppComponent implements OnDestroy {
     this.favorites = this.favoriteCitiesService.load();
   }
 
-  @HostBinding('class') get themeClass(): string { return `theme-${this.weatherData?.theme ?? 'default'}`; }
+  @HostBinding('class') get themeClass(): string {
+    return `theme-${this.weatherData?.theme ?? 'default'} scene-${this.weatherData?.isDaylight === false ? 'night' : 'day'}`;
+  }
   @HostBinding('style.--orb-top') get orbTop(): string | null { return this.weatherData ? `${this.getSolarOrbTop(this.weatherData)}vh` : null; }
 
   get quickCities(): string[] {

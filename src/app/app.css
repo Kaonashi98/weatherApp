@@ -5,9 +5,9 @@
   --blue: #2563eb;
   --violet: #7c3aed;
   --shadow: 0 28px 80px rgba(15, 23, 42, 0.24);
-  --orb-size: clamp(220px, 25vw, 380px);
-  --ray-size: clamp(350px, 38vw, 590px);
-  --orb-right: 5.2vw;
+  --orb-size: clamp(126px, 12vw, 150px);
+  --ray-size: var(--orb-size);
+  --orb-right: 18px;
   --orb-top: 7vh;
   --ray-offset: calc((var(--ray-size) - var(--orb-size)) / 2);
 
@@ -35,15 +35,23 @@
 }
 
 :host(.theme-cloudy-night) {
-  background: linear-gradient(135deg, #020617 0%, #172033 48%, #334155 100%);
+  background: linear-gradient(180deg, #020617 0%, #172033 50%, #334155 100%);
 }
 
 :host(.theme-rainy) {
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 48%, #075985 100%);
+  background: linear-gradient(180deg, #52677c 0%, #315b77 50%, #174b66 100%);
+}
+
+:host(.theme-rainy.scene-night) {
+  background: linear-gradient(180deg, #050b18 0%, #122847 50%, #103d52 100%);
 }
 
 :host(.theme-snowy) {
-  background: linear-gradient(135deg, #c7d2fe 0%, #e0f2fe 48%, #f8fafc 100%);
+  background: linear-gradient(180deg, #c7d2fe 0%, #e0f2fe 50%, #f8fafc 100%);
+}
+
+:host(.theme-snowy.scene-night) {
+  background: linear-gradient(180deg, #111827 0%, #334155 50%, #94a3b8 100%);
 }
 
 :host(.theme-stormy) {
@@ -51,31 +59,42 @@
 }
 
 :host(.theme-foggy) {
-  background: linear-gradient(135deg, #64748b 0%, #cbd5e1 56%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #64748b 0%, #cbd5e1 56%, #f1f5f9 100%);
+}
+
+:host(.theme-foggy.scene-night) {
+  background: linear-gradient(180deg, #0f172a 0%, #334155 50%, #64748b 100%);
 }
 
 :host(.theme-sunrise) {
   --orb-top: 18vh;
-  --orb-right: 6vw;
+  --orb-right: 18px;
   background: linear-gradient(180deg, #214b8f 0%, #5567b1 34%, #e7a4bd 58%, #ffd08a 78%, #ff8f5d 100%);
 }
 
-:host(.theme-sunset),
-:host(.theme-sunset-glow) {
+:host(.theme-sunset) {
   --orb-top: 57vh;
-  --orb-right: 7vw;
+  --orb-right: 18px;
   background: linear-gradient(180deg, #2d1b55 0%, #71365f 32%, #d05243 55%, #ff8a2a 73%, #f6c36b 100%);
 }
 
+:host(.theme-sunset-glow) {
+  --orb-size: clamp(92px, 9vw, 112px);
+  background: linear-gradient(180deg, #01040e 0%, #09152f 34%, #241b46 68%, #71354f 100%);
+}
+
 :host(.theme-night) {
+  --orb-size: clamp(92px, 9vw, 112px);
   --orb-top: 7vh;
-  --orb-right: 6vw;
-  background: linear-gradient(135deg, #020617 0%, #111827 48%, #1e1b4b 100%);
+  --orb-right: 18px;
+  background: linear-gradient(180deg, #01040e 0%, #07152d 34%, #172554 68%, #24205b 100%);
 }
 
 :host(.theme-partly-cloudy-night) {
+  --orb-size: clamp(92px, 9vw, 112px);
   --orb-top: 7vh;
-  --orb-right: 6vw;
+  --orb-right: 18px;
+  background: linear-gradient(180deg, #020617 0%, #172033 50%, #334155 100%);
 }
 
 * {
@@ -214,6 +233,7 @@
 }
 
 .sun-or-moon {
+  z-index: 1;
   right: var(--orb-right);
   top: var(--orb-top);
   width: var(--orb-size);
@@ -221,10 +241,11 @@
   border-radius: 0;
   opacity: 0;
   transform: translateY(12px) scale(0.96);
-  transition: opacity 500ms ease, transform 500ms ease, background 500ms ease, top 650ms ease;
+  transition: opacity 500ms ease, transform 500ms ease, background 500ms ease, top 1s linear;
 }
 
 .sun-rays {
+  z-index: 1;
   right: calc(var(--orb-right) - var(--ray-offset));
   top: calc(var(--orb-top) - var(--ray-offset));
   width: var(--ray-size);
@@ -237,6 +258,7 @@
   filter: blur(11px);
   mix-blend-mode: screen;
   transform-origin: center;
+  animation: flutter-sun-rays 36s linear infinite;
 }
 
 :host(.theme-sunny) .sun-or-moon,
@@ -244,7 +266,9 @@
 :host(.theme-sunrise) .sun-or-moon,
 :host(.theme-sunset) .sun-or-moon,
 :host(.theme-night) .sun-or-moon,
-:host(.theme-partly-cloudy-night) .sun-or-moon {
+:host(.theme-partly-cloudy-night) .sun-or-moon,
+:host(.theme-cloudy-night) .sun-or-moon,
+:host(.theme-sunset-glow) .sun-or-moon {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
@@ -260,17 +284,17 @@
 
 :host(.theme-sunset) .sun-or-moon {
   filter: saturate(1.18) brightness(1.08) sepia(0.18);
-  animation: sunset-drop 16s ease-in-out infinite alternate;
 }
 
 :host(.theme-sunrise) .sun-or-moon {
   filter: saturate(1.12) brightness(1.08) sepia(0.08);
-  animation: sunrise-lift 18s ease-in-out infinite alternate;
 }
 
 :host(.theme-night) .sun-or-moon,
-:host(.theme-partly-cloudy-night) .sun-or-moon {
-  background: url('/condizioni_atmosferiche/luna.png') center / contain no-repeat;
+:host(.theme-partly-cloudy-night) .sun-or-moon,
+:host(.theme-cloudy-night) .sun-or-moon,
+:host(.theme-sunset-glow) .sun-or-moon {
+  background: url('/condizioni_atmosferiche/luna_realistica_dettagliata.png') center / contain no-repeat;
   box-shadow: none;
 }
 
@@ -299,15 +323,12 @@
 }
 
 :host(.theme-night) .sun-rays,
-:host(.theme-partly-cloudy-night) .sun-rays {
-  opacity: 0.42;
-  background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.25) 0 18%, transparent 48%),
-    conic-gradient(from 12deg, rgba(255, 255, 255, 0.28) 0deg 8deg, transparent 13deg 42deg, rgba(219, 234, 254, 0.24) 62deg 70deg, transparent 76deg 126deg, rgba(255, 255, 255, 0.18) 148deg 158deg, transparent 164deg 224deg, rgba(219, 234, 254, 0.22) 246deg 254deg, transparent 260deg 318deg, rgba(255, 255, 255, 0.18) 336deg 344deg, transparent 350deg 360deg);
-  filter: blur(13px);
-}
+:host(.theme-partly-cloudy-night) .sun-rays,
+:host(.theme-cloudy-night) .sun-rays,
+:host(.theme-sunset-glow) .sun-rays { opacity: 0; }
 
 .rain-layer {
+  display: none;
   inset: -24% 0;
   opacity: 0;
   background-image: repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.62) 0 2px, transparent 2px 22px);
@@ -332,6 +353,7 @@
 }
 
 .snow-layer {
+  display: none;
   inset: -20% 0;
   opacity: 0;
   background-image:
@@ -347,6 +369,7 @@
 }
 
 .fog-layer {
+  display: none;
   inset: 0;
   opacity: 0;
   background:
@@ -362,6 +385,7 @@
 }
 
 .storm-flash {
+  display: none;
   inset: 0;
   opacity: 0;
   background: rgba(255, 255, 255, 0.82);
@@ -372,6 +396,7 @@
 }
 
 .lightning {
+  display: none;
   top: -8vh;
   width: 90px;
   height: 440px;
@@ -399,6 +424,7 @@
 }
 
 .stars {
+  display: none;
   inset: 0;
   opacity: 0;
   background:
@@ -1349,6 +1375,12 @@ button:disabled {
   to { transform: translateY(-10px) scale(1); }
 }
 
+@keyframes flutter-sun-rays {
+  0% { transform: rotate(0deg) scale(0.96); opacity: 0.58; }
+  50% { transform: rotate(180deg) scale(1.04); opacity: 0.82; }
+  100% { transform: rotate(360deg) scale(0.96); opacity: 0.58; }
+}
+
 
 @keyframes rain-fall {
   from { transform: translate3d(0, -140px, 0); }
@@ -1509,9 +1541,17 @@ button:disabled {
 }
 @media (max-width: 620px) {
   :host {
+    --orb-right: -30px;
     height: 100dvh;
     min-height: 0;
     overflow: hidden;
+  }
+
+  :host(.theme-night),
+  :host(.theme-partly-cloudy-night),
+  :host(.theme-cloudy-night),
+  :host(.theme-sunset-glow) {
+    --orb-right: -16px;
   }
 
   .page {
