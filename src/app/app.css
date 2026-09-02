@@ -290,6 +290,7 @@
 :host(.theme-partly-cloudy) .sun-or-moon,
 :host(.theme-sunrise) .sun-or-moon,
 :host(.theme-sunset) .sun-or-moon {
+  overflow: visible;
   box-shadow: none;
   filter: saturate(1.04) brightness(1.04);
 }
@@ -298,8 +299,12 @@
 :host(.theme-partly-cloudy) .sun-or-moon::before,
 :host(.theme-sunrise) .sun-or-moon::before,
 :host(.theme-sunset) .sun-or-moon::before {
+  inset: -28%;
   background-image: url('/condizioni_atmosferiche/sole_senzasfondo.png');
-  background-size: auto 220%;
+  background-size: auto 124%;
+  transform-origin: center;
+  will-change: transform;
+  animation: sun-corona-clockwise 36s linear infinite;
 }
 
 :host(.theme-sunset) .sun-or-moon {
@@ -1293,6 +1298,10 @@ button:disabled {
   0% { transform: rotate(0deg) scale(0.96); opacity: 0.58; }
   50% { transform: rotate(180deg) scale(1.04); opacity: 0.82; }
   100% { transform: rotate(360deg) scale(0.96); opacity: 0.58; }
+}
+
+@keyframes sun-corona-clockwise {
+  to { transform: rotate(360deg); }
 }
 
 
