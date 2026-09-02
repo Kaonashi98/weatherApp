@@ -299,7 +299,7 @@
 :host(.theme-sunrise) .sun-or-moon::before,
 :host(.theme-sunset) .sun-or-moon::before {
   background-image: url('/condizioni_atmosferiche/sole_senzasfondo.png');
-  background-size: auto 190%;
+  background-size: auto 220%;
 }
 
 :host(.theme-sunset) .sun-or-moon {
