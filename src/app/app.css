@@ -131,6 +131,9 @@
   background-repeat: no-repeat;
   background-size: cover;
   transform: scale(1.02);
+  transform-origin: center;
+  will-change: transform;
+  animation: atmospheric-texture-drift 24s ease-in-out infinite alternate;
   transition: opacity 650ms ease, filter 650ms ease;
 }
 
@@ -219,6 +222,16 @@
   opacity: 0.74;
   background-image: linear-gradient(180deg, rgba(241, 245, 249, 0.32), rgba(148, 163, 184, 0.26)), url('/condizioni_atmosferiche/nebbia.png');
   filter: saturate(0.68) brightness(0.94);
+}
+
+:host(.theme-stormy) .weather-scene::before,
+:host(.theme-rainy) .weather-scene::before {
+  animation-duration: 18s;
+}
+
+@keyframes atmospheric-texture-drift {
+  from { transform: translate3d(-1.2%, 0, 0) scale(1.08); }
+  to { transform: translate3d(1.2%, -0.7%, 0) scale(1.12); }
 }
 
 .sun-or-moon,

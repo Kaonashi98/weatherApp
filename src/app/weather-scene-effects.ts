@@ -7,28 +7,11 @@ type SnowFlake = { index: number };
 type Star = { x: number; y: number; radius: number; phase: number; speed: number; speedB: number; color: string; bright: boolean };
 type Point = { x: number; y: number };
 type Strike = { main: Point[]; branches: Point[][] };
-type CloudSpec = { count: number; opacity: number; speed: number; color: string };
 
 @Component({
   selector: 'app-weather-scene-effects',
   standalone: true,
-  host: { '[attr.data-theme]': 'theme' },
   template: `
-    <div
-      class="real-cloud-field"
-      [class.real-cloud-field--visible]="cloudsVisible"
-      [style.--cloud-opacity]="cloudOpacity"
-      [style.--cloud-duration]="cloudDuration"
-      [style.--cloud-duration-far]="cloudDurationFar"
-      [style.--cloud-duration-near]="cloudDurationNear"
-      [style.--cloud-delay-far]="cloudDelayFar"
-      [style.--cloud-delay-middle]="cloudDelayMiddle"
-      [style.--cloud-delay-near]="cloudDelayNear"
-    >
-      <img class="real-cloud real-cloud--far" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
-      <img class="real-cloud real-cloud--middle" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
-      <img class="real-cloud real-cloud--near" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
-    </div>
     <div class="real-fog-field" [class.real-fog-field--visible]="fogVisible" [class.real-fog-field--heavy]="theme === 'foggy'">
       <span></span><span></span><span></span>
     </div>
@@ -38,20 +21,6 @@ type CloudSpec = { count: number; opacity: number; speed: number; color: string 
     :host { position: absolute; inset: 0; display: block; overflow: hidden; pointer-events: none; }
     .weather-effects-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 
-    .real-cloud-field { position: absolute; inset: -12% -35%; overflow: hidden; opacity: 0; transition: opacity 650ms ease; contain: strict; }
-    .real-cloud-field--visible { opacity: var(--cloud-opacity); }
-    .real-cloud { position: absolute; left: 0; max-width: none; height: auto; opacity: 1; will-change: transform; user-select: none; animation: realistic-cloud-drift var(--cloud-duration) linear infinite; }
-    .real-cloud--far { top: 2%; width: clamp(560px, 52vw, 980px); opacity: .55; filter: blur(1.2px); animation-duration: var(--cloud-duration-far); animation-delay: var(--cloud-delay-far); }
-    .real-cloud--middle { top: 18%; width: clamp(680px, 64vw, 1160px); animation-delay: var(--cloud-delay-middle); }
-    .real-cloud--near { top: 40%; width: clamp(760px, 72vw, 1320px); opacity: .72; filter: blur(.35px); animation-duration: var(--cloud-duration-near); animation-delay: var(--cloud-delay-near); }
-    :host([data-theme='partly-cloudy-night']) .real-cloud,
-    :host([data-theme='cloudy-night']) .real-cloud { filter: saturate(.55) brightness(.58) contrast(1.08); }
-    :host([data-theme='rainy']) .real-cloud { filter: saturate(.52) brightness(.62) contrast(1.12); }
-    :host([data-theme='stormy']) .real-cloud { filter: saturate(.38) brightness(.43) contrast(1.18); }
-    :host([data-theme='sunrise']) .real-cloud { filter: sepia(.18) saturate(1.12) brightness(1.03); }
-    :host([data-theme='sunset']) .real-cloud,
-    :host([data-theme='sunset-glow']) .real-cloud { filter: sepia(.34) hue-rotate(315deg) saturate(1.12) brightness(.82); }
-
     .real-fog-field { position: absolute; inset: 0; opacity: 0; transition: opacity 650ms ease; overflow: hidden; }
     .real-fog-field--visible { opacity: .72; }
     .real-fog-field--heavy { opacity: .94; }
@@ -60,16 +29,12 @@ type CloudSpec = { count: number; opacity: number; speed: number; color: string 
     .real-fog-field span:nth-child(2) { top: 55%; height: 22%; opacity: .72; animation-duration: 27s; animation-delay: -16s; }
     .real-fog-field span:nth-child(3) { top: 70%; height: 16%; opacity: .58; animation-duration: 19s; animation-delay: -3s; }
 
-    @keyframes realistic-cloud-drift {
-      from { transform: translate3d(-58%, 0, 0); }
-      to { transform: translate3d(188%, 0, 0); }
-    }
     @keyframes realistic-fog-drift {
       from { transform: translate3d(-7%, -2%, 0) scaleX(.96); }
       to { transform: translate3d(7%, 2%, 0) scaleX(1.04); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .real-cloud, .real-fog-field span { animation-play-state: paused; }
+      .real-fog-field span { animation-play-state: paused; }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -91,15 +56,7 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
   private stars: Star[] = [];
   private strikes: Strike[] = [];
   private reducedMotion = false;
-  cloudsVisible = false;
   fogVisible = false;
-  cloudOpacity = '0';
-  cloudDuration = '90s';
-  cloudDurationFar = '112s';
-  cloudDurationNear = '74s';
-  cloudDelayFar = '-85s';
-  cloudDelayMiddle = '-38s';
-  cloudDelayNear = '-10s';
 
   ngAfterViewInit(): void {
     if (globalThis.navigator?.userAgent?.toLowerCase().includes('jsdom')) return;
@@ -129,19 +86,7 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
 
   private rebuildScene(): void {
     this.startTime = performance.now();
-    const cloudSpec = this.cloudSpec();
-    this.cloudsVisible = cloudSpec !== null;
     this.fogVisible = this.theme === 'foggy' || this.theme === 'snowy';
-    this.cloudOpacity = cloudSpec ? this.clamp(cloudSpec.opacity * 0.9, 0.16, 0.43).toFixed(3) : '0';
-    // La distanza attraversata sul web è molto maggiore che su telefono:
-    // una durata compensata conserva la velocità percepita della scena Flutter.
-    const cloudSeconds = cloudSpec ? this.clamp(24 / cloudSpec.speed, 52, 110) : 90;
-    this.cloudDuration = `${cloudSeconds.toFixed(1)}s`;
-    this.cloudDurationFar = `${(cloudSeconds * 1.24).toFixed(1)}s`;
-    this.cloudDurationNear = `${(cloudSeconds * 0.82).toFixed(1)}s`;
-    this.cloudDelayFar = `${(-cloudSeconds * 0.76).toFixed(1)}s`;
-    this.cloudDelayMiddle = `${(-cloudSeconds * 0.42).toFixed(1)}s`;
-    this.cloudDelayNear = `${(-cloudSeconds * 0.13).toFixed(1)}s`;
 
     const rainRandom = this.random(7);
     const heavy = this.theme === 'stormy';
@@ -219,24 +164,6 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     if (this.theme === 'rainy' || this.theme === 'stormy') this.drawRain(context, width, height, seconds, this.theme === 'stormy');
     if (this.theme === 'snowy') this.drawSnow(context, width, height, seconds);
     if (this.theme === 'stormy') this.drawLightning(context, width, height, seconds);
-  }
-
-  private cloudSpec(): CloudSpec | null {
-    const coverage = this.clamp(this.cloudCover / 100);
-    const windFactor = 0.72 + this.clamp(this.windSpeed / 65) * 0.7;
-    if (['sunrise', 'sunset', 'sunset-glow'].includes(this.theme)) {
-      if (this.cloudCover <= 15) return null;
-      return { count: 2 + Math.round(coverage * 5), opacity: 0.2 + coverage * 0.22, speed: 0.2 * windFactor, color: this.theme === 'sunrise' ? '#ffe4d6' : '#e9d5ff' };
-    }
-    if (this.theme === 'partly-cloudy') return { count: Math.max(2, Math.round(coverage * 7)), opacity: 0.24 + coverage * 0.28, speed: 0.34 * windFactor, color: '#f8fafc' };
-    if (this.theme === 'cloudy') return { count: 5 + Math.round(coverage * 4), opacity: 0.36 + coverage * 0.18, speed: 0.25 * windFactor, color: '#e2e8f0' };
-    if (this.theme === 'partly-cloudy-night') return { count: Math.max(2, Math.round(coverage * 7)), opacity: 0.2 + coverage * 0.2, speed: 0.22 * windFactor, color: '#94a3b8' };
-    if (this.theme === 'cloudy-night') return { count: 5 + Math.round(coverage * 3), opacity: 0.26 + coverage * 0.14, speed: 0.18 * windFactor, color: '#64748b' };
-    if (this.theme === 'rainy') return { count: 5 + Math.round(coverage * 3), opacity: 0.3 + coverage * 0.1, speed: 0.28 * windFactor, color: '#94a3b8' };
-    if (this.theme === 'stormy') return { count: 7 + Math.round(coverage * 3), opacity: 0.38 + coverage * 0.1, speed: 0.42 * windFactor, color: '#475569' };
-    if (this.theme === 'snowy') return { count: 4 + Math.round(coverage * 3), opacity: 0.28 + coverage * 0.12, speed: 0.15 * windFactor, color: '#f1f5f9' };
-    if (this.theme === 'foggy') return { count: 4, opacity: 0.22, speed: 0.1 * windFactor, color: '#e2e8f0' };
-    return null;
   }
 
   private drawRain(context: CanvasRenderingContext2D, width: number, height: number, seconds: number, heavy: boolean): void {
