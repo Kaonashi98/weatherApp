@@ -1,10 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { WeatherTheme } from './services/weather';
 
-type Cloud = { y: number; phase: number; speed: number; scale: number; opacity: number; seed: number };
 type RainDrop = { x: number; phase: number; speed: number; length: number; width: number; opacity: number; slant: number };
+type RainSplash = { x: number; y: number; phase: number; speed: number; size: number; opacity: number };
 type SnowFlake = { index: number };
-type Star = { x: number; y: number; radius: number; phase: number; speed: number; speedB: number; warmth: number; bright: boolean };
+type Star = { x: number; y: number; radius: number; phase: number; speed: number; speedB: number; color: string; bright: boolean };
 type Point = { x: number; y: number };
 type Strike = { main: Point[]; branches: Point[][] };
 type CloudSpec = { count: number; opacity: number; speed: number; color: string };
@@ -12,8 +12,66 @@ type CloudSpec = { count: number; opacity: number; speed: number; color: string 
 @Component({
   selector: 'app-weather-scene-effects',
   standalone: true,
-  template: '<canvas #canvas class="weather-effects-canvas" aria-hidden="true"></canvas>',
-  styles: [':host{position:absolute;inset:0;display:block;pointer-events:none}.weather-effects-canvas{display:block;width:100%;height:100%}'],
+  host: { '[attr.data-theme]': 'theme' },
+  template: `
+    <div
+      class="real-cloud-field"
+      [class.real-cloud-field--visible]="cloudsVisible"
+      [style.--cloud-opacity]="cloudOpacity"
+      [style.--cloud-duration]="cloudDuration"
+      [style.--cloud-duration-far]="cloudDurationFar"
+      [style.--cloud-duration-near]="cloudDurationNear"
+      [style.--cloud-delay-far]="cloudDelayFar"
+      [style.--cloud-delay-middle]="cloudDelayMiddle"
+      [style.--cloud-delay-near]="cloudDelayNear"
+    >
+      <img class="real-cloud real-cloud--far" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
+      <img class="real-cloud real-cloud--middle" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
+      <img class="real-cloud real-cloud--near" src="/condizioni_atmosferiche/nuvole.png" alt="" draggable="false">
+    </div>
+    <div class="real-fog-field" [class.real-fog-field--visible]="fogVisible" [class.real-fog-field--heavy]="theme === 'foggy'">
+      <span></span><span></span><span></span>
+    </div>
+    <canvas #canvas class="weather-effects-canvas" aria-hidden="true"></canvas>
+  `,
+  styles: [`
+    :host { position: absolute; inset: 0; display: block; overflow: hidden; pointer-events: none; }
+    .weather-effects-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+    .real-cloud-field { position: absolute; inset: -12% -35%; overflow: hidden; opacity: 0; transition: opacity 650ms ease; contain: strict; }
+    .real-cloud-field--visible { opacity: var(--cloud-opacity); }
+    .real-cloud { position: absolute; left: 0; max-width: none; height: auto; opacity: 1; will-change: transform; user-select: none; animation: realistic-cloud-drift var(--cloud-duration) linear infinite; }
+    .real-cloud--far { top: 2%; width: clamp(560px, 52vw, 980px); opacity: .55; filter: blur(1.2px); animation-duration: var(--cloud-duration-far); animation-delay: var(--cloud-delay-far); }
+    .real-cloud--middle { top: 18%; width: clamp(680px, 64vw, 1160px); animation-delay: var(--cloud-delay-middle); }
+    .real-cloud--near { top: 40%; width: clamp(760px, 72vw, 1320px); opacity: .72; filter: blur(.35px); animation-duration: var(--cloud-duration-near); animation-delay: var(--cloud-delay-near); }
+    :host([data-theme='partly-cloudy-night']) .real-cloud,
+    :host([data-theme='cloudy-night']) .real-cloud { filter: saturate(.55) brightness(.58) contrast(1.08); }
+    :host([data-theme='rainy']) .real-cloud { filter: saturate(.52) brightness(.62) contrast(1.12); }
+    :host([data-theme='stormy']) .real-cloud { filter: saturate(.38) brightness(.43) contrast(1.18); }
+    :host([data-theme='sunrise']) .real-cloud { filter: sepia(.18) saturate(1.12) brightness(1.03); }
+    :host([data-theme='sunset']) .real-cloud,
+    :host([data-theme='sunset-glow']) .real-cloud { filter: sepia(.34) hue-rotate(315deg) saturate(1.12) brightness(.82); }
+
+    .real-fog-field { position: absolute; inset: 0; opacity: 0; transition: opacity 650ms ease; overflow: hidden; }
+    .real-fog-field--visible { opacity: .72; }
+    .real-fog-field--heavy { opacity: .94; }
+    .real-fog-field span { position: absolute; left: -35%; width: 170%; height: 18%; border-radius: 50%; background: rgba(255,255,255,.25); filter: blur(24px); will-change: transform; animation: realistic-fog-drift 22s ease-in-out infinite alternate; }
+    .real-fog-field span:nth-child(1) { top: 38%; animation-delay: -7s; }
+    .real-fog-field span:nth-child(2) { top: 55%; height: 22%; opacity: .72; animation-duration: 27s; animation-delay: -16s; }
+    .real-fog-field span:nth-child(3) { top: 70%; height: 16%; opacity: .58; animation-duration: 19s; animation-delay: -3s; }
+
+    @keyframes realistic-cloud-drift {
+      from { transform: translate3d(-58%, 0, 0); }
+      to { transform: translate3d(188%, 0, 0); }
+    }
+    @keyframes realistic-fog-drift {
+      from { transform: translate3d(-7%, -2%, 0) scaleX(.96); }
+      to { transform: translate3d(7%, 2%, 0) scaleX(1.04); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .real-cloud, .real-fog-field span { animation-play-state: paused; }
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, OnDestroy {
@@ -27,13 +85,21 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
   private resizeObserver: ResizeObserver | null = null;
   private frameId: number | null = null;
   private startTime = performance.now();
-  private lastFrameTime = 0;
-  private clouds: Cloud[] = [];
   private rain: RainDrop[] = [];
+  private rainSplashes: RainSplash[] = [];
   private snow: SnowFlake[] = [];
   private stars: Star[] = [];
   private strikes: Strike[] = [];
   private reducedMotion = false;
+  cloudsVisible = false;
+  fogVisible = false;
+  cloudOpacity = '0';
+  cloudDuration = '90s';
+  cloudDurationFar = '112s';
+  cloudDurationNear = '74s';
+  cloudDelayFar = '-85s';
+  cloudDelayMiddle = '-38s';
+  cloudDelayNear = '-10s';
 
   ngAfterViewInit(): void {
     if (globalThis.navigator?.userAgent?.toLowerCase().includes('jsdom')) return;
@@ -64,13 +130,18 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
   private rebuildScene(): void {
     this.startTime = performance.now();
     const cloudSpec = this.cloudSpec();
-    const cloudRandom = this.random((cloudSpec?.count ?? 0) * 17 + Math.round((cloudSpec?.opacity ?? 0) * 100));
-    this.clouds = cloudSpec ? Array.from({ length: cloudSpec.count }, (_, index) => ({
-      y: 0.22 + index / Math.max(1, cloudSpec.count - 1) * 0.38 + cloudRandom() * 0.06,
-      phase: cloudRandom(), speed: cloudSpec.speed * (0.65 + cloudRandom() * 0.7),
-      scale: 0.7 + cloudRandom() * 0.9, opacity: cloudSpec.opacity * (0.55 + cloudRandom() * 0.45),
-      seed: Math.floor(cloudRandom() * 65536)
-    })) : [];
+    this.cloudsVisible = cloudSpec !== null;
+    this.fogVisible = this.theme === 'foggy' || this.theme === 'snowy';
+    this.cloudOpacity = cloudSpec ? this.clamp(cloudSpec.opacity * 0.9, 0.16, 0.43).toFixed(3) : '0';
+    // La distanza attraversata sul web è molto maggiore che su telefono:
+    // una durata compensata conserva la velocità percepita della scena Flutter.
+    const cloudSeconds = cloudSpec ? this.clamp(24 / cloudSpec.speed, 52, 110) : 90;
+    this.cloudDuration = `${cloudSeconds.toFixed(1)}s`;
+    this.cloudDurationFar = `${(cloudSeconds * 1.24).toFixed(1)}s`;
+    this.cloudDurationNear = `${(cloudSeconds * 0.82).toFixed(1)}s`;
+    this.cloudDelayFar = `${(-cloudSeconds * 0.76).toFixed(1)}s`;
+    this.cloudDelayMiddle = `${(-cloudSeconds * 0.42).toFixed(1)}s`;
+    this.cloudDelayNear = `${(-cloudSeconds * 0.13).toFixed(1)}s`;
 
     const rainRandom = this.random(7);
     const heavy = this.theme === 'stormy';
@@ -81,6 +152,10 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
         length: 0.045 + depth * 0.07 + rainRandom() * 0.02, width: 0.45 + depth * (heavy ? 0.95 : 0.7),
         opacity: 0.04 + depth * (heavy ? 0.22 : 0.16), slant: 0.06 + rainRandom() * 0.04 };
     });
+    this.rainSplashes = Array.from({ length: heavy ? 14 : 8 }, () => ({
+      x: rainRandom(), y: rainRandom(), phase: rainRandom(), speed: 0.7 + rainRandom() * 0.8,
+      size: (heavy ? 3.2 : 2.4) + rainRandom() * 2.2, opacity: 0.16 + rainRandom() * 0.18
+    }));
     this.snow = Array.from({ length: 104 }, (_, index) => ({ index }));
 
     const starRandom = this.random(42);
@@ -95,9 +170,13 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
         x = starRandom();
         y = topBand ? 0.012 + starRandom() * 0.075 : 0.07 + starRandom() * 0.62;
       }
+      const phase = starRandom();
+      const speed = 0.35 + starRandom() * 1.8;
+      const speedB = 0.7 + starRandom() * 2.4;
+      const warmth = starRandom();
       return { x, y,
-        radius: 0.42 + magnitude * 1.62, phase: starRandom(), speed: 0.35 + starRandom() * 1.8,
-        speedB: 0.7 + starRandom() * 2.4, warmth: starRandom(), bright: magnitude > 0.72 };
+        radius: 0.42 + magnitude * 1.62, phase, speed, speedB,
+        color: this.mixColor('#dbeafe', '#fff1d6', warmth), bright: magnitude > 0.72 };
     });
     this.strikes = this.makeStrikes();
     this.restartLoop();
@@ -107,7 +186,9 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     if (!this.context) return;
     const canvas = this.canvasRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const ratio = Math.min(globalThis.devicePixelRatio || 1, 2);
+    // Gli effetti atmosferici non richiedono la densità da testo: limitare il
+    // rapporto evita milioni di pixel ridisegnati senza differenze percepibili.
+    const ratio = Math.min(globalThis.devicePixelRatio || 1, 1.35);
     canvas.width = Math.max(1, Math.round(rect.width * ratio));
     canvas.height = Math.max(1, Math.round(rect.height * ratio));
     this.context.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -116,12 +197,9 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
 
   private restartLoop(): void {
     if (this.frameId !== null) cancelAnimationFrame(this.frameId);
-    if (this.reducedMotion) { this.draw(this.startTime + 3700); return; }
+    if (this.reducedMotion || !this.needsCanvasAnimation()) { this.draw(this.startTime + 3700); return; }
     const tick = (now: number) => {
-      if (now - this.lastFrameTime >= 1000 / 30) {
-        this.draw(now);
-        this.lastFrameTime = now;
-      }
+      this.draw(now);
       this.frameId = requestAnimationFrame(tick);
     };
     this.frameId = requestAnimationFrame(tick);
@@ -131,18 +209,15 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     const context = this.context;
     if (!context) return;
     const canvas = this.canvasRef.nativeElement;
-    const ratio = Math.min(globalThis.devicePixelRatio || 1, 2);
+    const ratio = Math.min(globalThis.devicePixelRatio || 1, 1.35);
     const width = canvas.width / ratio;
     const height = canvas.height / ratio;
     context.clearRect(0, 0, width, height);
     const seconds = (now - this.startTime) / 1000;
 
     if (this.isNightTheme()) this.drawStars(context, width, height, seconds);
-    const cloudSpec = this.cloudSpec();
-    if (cloudSpec) this.drawClouds(context, width, height, seconds, cloudSpec);
     if (this.theme === 'rainy' || this.theme === 'stormy') this.drawRain(context, width, height, seconds, this.theme === 'stormy');
-    if (this.theme === 'snowy') { this.drawSnow(context, width, height, seconds); this.drawFog(context, width, height, seconds, false); }
-    if (this.theme === 'foggy') this.drawFog(context, width, height, seconds, true);
+    if (this.theme === 'snowy') this.drawSnow(context, width, height, seconds);
     if (this.theme === 'stormy') this.drawLightning(context, width, height, seconds);
   }
 
@@ -164,31 +239,6 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     return null;
   }
 
-  private drawClouds(context: CanvasRenderingContext2D, width: number, height: number, seconds: number, spec: CloudSpec): void {
-    const span = width + 420;
-    for (const cloud of this.clouds) {
-      const cycle = (cloud.phase + seconds / 40 * cloud.speed) % 1;
-      const x = cycle * span - 210;
-      const y = cloud.y * height;
-      const random = this.random(cloud.seed);
-      const cloudWidth = (150 + random() * 70) * cloud.scale;
-      const cloudHeight = (46 + random() * 18) * cloud.scale;
-      const puffs = [{ x, y, rx: cloudWidth / 2, ry: cloudHeight / 2 }];
-      for (let index = 0; index < 6; index++) puffs.push({
-        x: x + cloudWidth * (-0.36 + index * 0.145), y: y - cloudHeight * (0.08 + random() * 0.34),
-        rx: cloudWidth * (0.26 + random() * 0.2) / 2, ry: cloudHeight * (0.62 + random() * 0.55) / 2
-      });
-      context.save(); context.globalAlpha = cloud.opacity;
-      context.fillStyle = '#0f172a'; context.globalAlpha *= 0.18; context.filter = `blur(${7 * cloud.scale}px)`;
-      for (const puff of puffs) this.ellipse(context, puff.x, puff.y + cloudHeight * 0.12, puff.rx, puff.ry);
-      context.filter = `blur(${1.8 * cloud.scale}px)`; context.fillStyle = spec.color; context.globalAlpha = cloud.opacity;
-      for (const puff of puffs) this.ellipse(context, puff.x, puff.y, puff.rx, puff.ry);
-      context.filter = `blur(${3.2 * cloud.scale}px)`; context.fillStyle = '#ffffff'; context.globalAlpha = cloud.opacity * 0.34;
-      for (const puff of puffs.slice(1, 5)) this.ellipse(context, puff.x, puff.y - puff.ry * 0.32, puff.rx * 0.72, puff.ry * 0.42);
-      context.restore();
-    }
-  }
-
   private drawRain(context: CanvasRenderingContext2D, width: number, height: number, seconds: number, heavy: boolean): void {
     const progress = (seconds % (heavy ? 1.2 : 1.5)) / (heavy ? 1.2 : 1.5);
     const intensity = this.precipitationIntensity();
@@ -204,6 +254,22 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
       context.globalAlpha = drop.opacity * (0.62 + intensity * 0.38) * (drop.opacity < 0.12 ? 0.78 : 1);
       context.lineWidth = drop.width * (drop.opacity < 0.12 ? 0.82 : 1);
       context.beginPath(); context.moveTo(x, y); context.lineTo(x + length * drop.slant * windSlant, y + length); context.stroke();
+    }
+    const visibleSplashes = Math.round(this.rainSplashes.length * intensity);
+    for (const splash of this.rainSplashes.slice(0, visibleSplashes)) {
+      const cycle = (progress * splash.speed + splash.phase) % 1;
+      if (cycle > 0.16) continue;
+      const splashProgress = cycle / 0.16;
+      const x = splash.x * width;
+      const y = height * (0.82 + splash.y * 0.14);
+      const radius = splash.size * (0.35 + splashProgress * 1.7);
+      const alpha = splash.opacity * (1 - splashProgress);
+      context.globalAlpha = alpha;
+      context.lineWidth = 0.9;
+      context.beginPath(); context.ellipse(x, y, radius * 1.2, radius * 0.275, 0, 0, Math.PI * 2); context.stroke();
+      context.globalAlpha = alpha * 0.55;
+      context.fillStyle = '#fff';
+      context.beginPath(); context.arc(x, y, splash.size * 0.18 * (1 - splashProgress), 0, Math.PI * 2); context.fill();
     }
     context.restore();
   }
@@ -222,17 +288,6 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     context.restore();
   }
 
-  private drawFog(context: CanvasRenderingContext2D, width: number, height: number, seconds: number, heavy: boolean): void {
-    const progress = (seconds % (heavy ? 22 : 28)) / (heavy ? 22 : 28);
-    context.save(); context.fillStyle = '#fff'; context.filter = 'blur(12px)';
-    for (let index = 0; index < (heavy ? 5 : 3); index++) {
-      const phase = (progress * (0.35 + index * 0.12) + index * 0.27) % 1;
-      context.globalAlpha = (heavy ? 0.16 : 0.1) + index * 0.03;
-      this.ellipse(context, phase * (width + 220) - 110, height * (0.42 + index * 0.12), width * (0.7 + index * 0.08) / 2, (70 + index * 18) / 2);
-    }
-    context.restore();
-  }
-
   private drawStars(context: CanvasRenderingContext2D, width: number, height: number, seconds: number): void {
     const progress = 0.37;
     const dim = this.theme !== 'night' && this.theme !== 'sunset-glow';
@@ -243,12 +298,11 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
       const waveB = 0.5 + 0.5 * Math.sin((progress * star.speedB + star.phase * 1.37) * Math.PI * 2);
       const twinkle = 1 - (0.18 + star.y * 0.55) + (0.18 + star.y * 0.55) * (0.55 * waveA + 0.45 * waveB);
       const alpha = (0.22 + 0.78 * twinkle) * factor;
-      const color = this.mixColor('#dbeafe', '#fff1d6', star.warmth);
-      context.fillStyle = color; context.globalAlpha = alpha; context.beginPath();
+      context.fillStyle = star.color; context.globalAlpha = alpha; context.beginPath();
       context.arc(star.x * width, star.y * height, star.radius * (0.75 + 0.35 * twinkle), 0, Math.PI * 2); context.fill();
       if (star.bright && twinkle > 0.78 && !dim) {
         const spike = 3.2 + star.radius * 3.4 * ((twinkle - 0.78) / 0.22);
-        context.strokeStyle = color; context.globalAlpha = alpha * 0.55; context.lineWidth = 0.7;
+        context.strokeStyle = star.color; context.globalAlpha = alpha * 0.55; context.lineWidth = 0.7;
         context.beginPath(); context.moveTo(star.x * width, star.y * height - spike); context.lineTo(star.x * width, star.y * height + spike);
         context.moveTo(star.x * width - spike * 0.7, star.y * height); context.lineTo(star.x * width + spike * 0.7, star.y * height); context.stroke();
       }
@@ -318,9 +372,11 @@ export class WeatherSceneEffectsComponent implements AfterViewInit, OnChanges, O
     if ([55, 57, 63, 67, 81].includes(this.weatherCode)) return 0.74; if ([65, 82].includes(this.weatherCode)) return 1; return 0.58;
   }
   private snowIntensity(): number { if ([71, 77, 85].includes(this.weatherCode)) return 0.42; if (this.weatherCode === 73) return 0.68; return [75, 86].includes(this.weatherCode) ? 1 : 0.62; }
+  private needsCanvasAnimation(): boolean {
+    return this.isNightTheme() || ['rainy', 'stormy', 'snowy'].includes(this.theme);
+  }
   private isNightTheme(): boolean { return ['night', 'partly-cloudy-night', 'cloudy-night', 'sunset-glow'].includes(this.theme); }
   private pulse(value: number, start: number, end: number): number { if (value <= start || value >= end) return 0; const progress = (value - start) / (end - start); return progress < 0.2 ? 1 - Math.pow(1 - progress / 0.2, 3) : Math.pow(this.clamp(1 - (progress - 0.2) / 0.8), 2.2); }
-  private ellipse(context: CanvasRenderingContext2D, x: number, y: number, rx: number, ry: number): void { context.beginPath(); context.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); context.fill(); }
   private clamp(value: number, min = 0, max = 1): number { return Math.min(max, Math.max(min, value)); }
   private random(seed: number): () => number { let value = seed || 1; return () => { value = value * 1664525 + 1013904223 >>> 0; return value / 4294967296; }; }
   private mixColor(first: string, second: string, amount: number): string { const a = this.hex(first); const b = this.hex(second); return `rgb(${Math.round(a[0] + (b[0] - a[0]) * amount)},${Math.round(a[1] + (b[1] - a[1]) * amount)},${Math.round(a[2] + (b[2] - a[2]) * amount)})`; }
