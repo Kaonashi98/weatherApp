@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CitySuggestion } from './weather';
+import { CitySuggestion } from './weather.models';
 
 export type FavoriteCity = Pick<
   CitySuggestion,

@@ -1,0 +1,7 @@
+.angular/
+.codex/
+.codex_docx_render/
+coverage/
+dist/
+node_modules/
+package-lock.json

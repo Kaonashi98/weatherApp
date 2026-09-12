@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
+    "format": "prettier --write package.json README.md .github src/app/app.ts src/app/app.html src/app/app.css src/app/app.spec.ts src/app/weather-scene.ts src/app/weather-scene.spec.ts src/app/weather-scene-effects.ts src/app/services/weather.ts src/app/services/weather.spec.ts src/app/services/geocoding.ts src/app/services/open-meteo-client.ts src/app/services/weather-errors.ts src/app/services/weather.models.ts",
+    "format:check": "prettier --check package.json README.md .github src/app/app.ts src/app/app.html src/app/app.css src/app/app.spec.ts src/app/weather-scene.ts src/app/weather-scene.spec.ts src/app/weather-scene-effects.ts src/app/services/weather.ts src/app/services/weather.spec.ts src/app/services/geocoding.ts src/app/services/open-meteo-client.ts src/app/services/weather-errors.ts src/app/services/weather.models.ts"
   },
   "prettier": {
     "printWidth": 100,
@@ -23,23 +26,24 @@
   "private": true,
   "packageManager": "npm@11.8.0",
   "dependencies": {
-    "@angular/common": "^22.0.5",
-    "@angular/compiler": "^22.0.5",
-    "@angular/core": "^22.0.5",
-    "@angular/forms": "^22.0.5",
-    "@angular/platform-browser": "^22.0.5",
-    "@angular/router": "^22.0.5",
+    "@angular/common": "^22.1.6",
+    "@angular/compiler": "^22.1.6",
+    "@angular/core": "^22.1.6",
+    "@angular/forms": "^22.1.6",
+    "@angular/platform-browser": "^22.1.6",
+    "@angular/router": "^22.1.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "^0.16.2"
+    "zone.js": "^0.16.3"
   },
   "devDependencies": {
-    "@angular/build": "^22.0.5",
-    "@angular/cli": "^22.0.5",
-    "@angular/compiler-cli": "^22.0.5",
+    "@angular/build": "^22.1.8",
+    "@angular/cli": "^22.1.8",
+    "@angular/compiler-cli": "^22.1.6",
     "jsdom": "^27.1.0",
+    "prettier": "^3.9.6",
     "typescript": "~6.0.3",
-    "vitest": "^4.0.8"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "@babel/core": "7.29.7",
