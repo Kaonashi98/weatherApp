@@ -33,7 +33,7 @@
     </nav>
     <section id="privacy-it" class="language-panel" lang="it">
     <h1>Informativa sulla privacy</h1>
-    <p class="updated">Ultimo aggiornamento: 12 settembre 2026</p>
+    <p class="updated">Ultimo aggiornamento: 18 settembre 2026</p>
 
     <p>Questa informativa riguarda il sito <a href="https://weather-app-blond-six-70.vercel.app/">WeatherApp</a> e l'applicazione Android WeatherApp. <strong>La webapp e l'app Android conservano localmente le ultime cinque località, i Preferiti e la lingua scelta; nessuno di questi dati viene salvato in un database WeatherApp</strong>.</p>
 
@@ -42,14 +42,18 @@
 
     <h2>Dati trattati e finalità</h2>
     <p>WeatherApp non richiede account, non contiene pubblicità, non prevede acquisti in-app, non effettua profilazione e non integra sistemi di analytics o tracciamento.</p>
-    <p>Quando l'utente cerca una località, il testo della ricerca viene inviato a Open-Meteo. Nell'app Android vengono inviati anche la lingua di visualizzazione e il codice Paese/regione della lingua di sistema per localizzare e ordinare i risultati. Le coordinate della località scelta vengono inviate a Open-Meteo: la webapp le usa per ottenere meteo, previsioni, fuso orario ed eventi astronomici, mentre l'app Android le usa anche per qualità dell'aria e pollini. Nella versione Android 1.3.0+16 la posizione approssimativa viene richiesta soltanto dopo un tocco esplicito su <strong>Usa posizione attuale</strong>: Android determina le coordinate tramite il fornitore di rete e il nome della località tramite il proprio servizio di geocodifica, poi le coordinate vengono inviate a Open-Meteo. L'app non richiede la posizione precisa, non accede alla posizione in background e la ricerca manuale resta disponibile. La webapp non richiede accesso alla posizione del dispositivo.</p>
-    <p>I dati sono trattati esclusivamente per fornire la funzione richiesta. Località recenti, Preferiti e lingua restano soltanto nel browser o nel dispositivo. Nell'app Android restano locali anche unità di misura e ultimo meteo mostrato nel widget, con backup e trasferimento disabilitati. WeatherApp non gestisce un database di utenti; nell'app Android la posizione viene acquisita soltanto su richiesta esplicita. La località e le coordinate approssimative possono essere salvate nei Recenti o nei Preferiti per successive consultazioni e aggiornamenti meteo; non viene registrato un percorso degli spostamenti.</p>
+    <p>Quando l'utente cerca una località, il testo della ricerca viene inviato a Open-Meteo. Nell'app Android vengono inviati anche la lingua di visualizzazione e il codice Paese/regione della lingua di sistema per localizzare e ordinare i risultati. Le coordinate della località scelta vengono inviate a Open-Meteo: la webapp le usa per ottenere meteo, previsioni, fuso orario ed eventi astronomici, mentre l'app Android le usa anche per qualità dell'aria e pollini. Nella versione Android 1.4.0+19 la posizione approssimativa viene richiesta soltanto dopo un tocco esplicito su <strong>Usa posizione attuale</strong>: Android determina le coordinate tramite il fornitore di rete e il nome della località tramite il proprio servizio di geocodifica, poi le coordinate vengono inviate a Open-Meteo. L'app non richiede la posizione precisa, non accede alla posizione in background e la ricerca manuale resta disponibile. La webapp non richiede accesso alla posizione del dispositivo.</p>
+    <p>I dati sono trattati esclusivamente per fornire la funzione richiesta. Località recenti, Preferiti e lingua restano soltanto nel browser o nel dispositivo. Nell'app Android restano locali anche unità di misura e ultimo meteo, per la consultazione offline e il widget, con backup e trasferimento disabilitati. Le previsioni richiedono una connessione Internet. WeatherApp non gestisce un database di utenti; nell'app Android la posizione viene acquisita soltanto su richiesta esplicita. La località e le coordinate approssimative possono essere salvate nei Recenti o nei Preferiti per successive consultazioni e aggiornamenti meteo; non viene registrato un percorso degli spostamenti.</p>
+
+    <p>All’avvio, WeatherApp V4 controlla tramite Google Play se è disponibile un aggiornamento. Secondo la documentazione Google, il controllo tratta metadati del dispositivo, versione dell’app ed elenco dei moduli e asset pack installati, per determinare la disponibilità dell’aggiornamento. Il trattamento è gestito da Google Play secondo le proprie condizioni e informative; WeatherApp non riceve identificatori pubblicitari da questo controllo.</p>
+    <p>L’app conserva inoltre l’ultima versione delle novità già mostrata. La cache meteo per località e i dati del widget sono separati dall’elenco Recenti: cancellare l’elenco non elimina questi dati. Cache, widget e preferenze si eliminano cancellando i dati dell’app nelle impostazioni Android o disinstallando l’app.</p>
 
     <h2>Sito, cookie e memoria locale</h2>
     <p>La webapp non imposta cookie e non salva una cronologia in un database WeatherApp. Memorizza nel browser soltanto Recenti, Preferiti e lingua. Il sito e questa pagina sono ospitati da Vercel: Vercel può trattare indirizzo IP, posizione approssimativa, dati tecnici e log per erogare e proteggere il servizio, secondo la propria informativa. I Recenti si cancellano con il comando Cancella, i Preferiti con il pulsante a stella. I valori locali vengono eliminati cancellando i dati del sito o dell'app e non vengono sincronizzati tra dispositivi.</p>
 
     <h2>Fornitori esterni</h2>
     <ul>
+      <li><a href="https://developer.android.com/guide/playcore/in-app-updates#data-safety">Google Play</a>: controllo degli aggiornamenti dell’app.</li>
       <li><a href="https://open-meteo.com/en/terms">Open-Meteo GmbH</a>: meteo, qualità dell'aria, pollini, fusi orari, eventi astronomici e geocodifica, dati con attribuzione CC BY 4.0.</li>
       <li><a href="https://atmosphere.copernicus.eu/">Copernicus CAMS</a>: dati di qualità dell'aria e pollini usati dall'app Android e distribuiti tramite Open-Meteo.</li>
       <li><a href="https://policies.google.com/privacy">Servizi Android</a>: posizione approssimativa e geocodifica usate soltanto su richiesta esplicita.</li>
@@ -76,7 +80,7 @@
 
     <section id="privacy-en" class="language-panel" lang="en" hidden>
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: September 12, 2026</p>
+      <p class="updated">Last updated: September 18, 2026</p>
 
       <p>This policy covers the <a href="https://weather-app-blond-six-70.vercel.app/">WeatherApp website</a> and the WeatherApp Android application. <strong>The web app and Android app locally store the five most recent places, Favorites and language choice; none of these values is stored in a WeatherApp database.</strong></p>
 
@@ -85,14 +89,18 @@
 
       <h2>Data processed and purposes</h2>
       <p>WeatherApp does not require an account, contain advertising, offer in-app purchases, perform profiling, or integrate analytics or tracking systems.</p>
-      <p>When a user searches for a place, the search text is sent to Open-Meteo. The Android app also sends display language and the country/region code from the system locale to localize and order results. Selected coordinates are sent to Open-Meteo: the web app uses them to retrieve weather, forecasts, time-zone and astronomical data, while the Android app also uses them for air-quality and pollen data. In Android version 1.3.0+16, approximate location is requested only after an explicit tap on <strong>Use current location</strong>: Android determines coordinates through the network provider and the place name through its geocoding service, then coordinates are sent to Open-Meteo. The app does not request precise location, does not access location in the background, and manual search remains available. The web app does not request access to device location.</p>
-      <p>Data is processed solely to provide the requested feature. Recent places, Favorites and language remain only in the browser or on the device. In the Android app, measurement units and the latest weather shown by the widget also remain local, with cloud backup and transfer disabled. WeatherApp does not maintain a user database; in the Android app, location is acquired only on explicit request. The resulting place and approximate coordinates may be saved in Recent searches or Favorites for subsequent weather views and refreshes; no movement history is recorded.</p>
+      <p>When a user searches for a place, the search text is sent to Open-Meteo. The Android app also sends display language and the country/region code from the system locale to localize and order results. Selected coordinates are sent to Open-Meteo: the web app uses them to retrieve weather, forecasts, time-zone and astronomical data, while the Android app also uses them for air-quality and pollen data. In Android version 1.4.0+19, approximate location is requested only after an explicit tap on <strong>Use current location</strong>: Android determines coordinates through the network provider and the place name through its geocoding service, then coordinates are sent to Open-Meteo. The app does not request precise location, does not access location in the background, and manual search remains available. The web app does not request access to device location.</p>
+      <p>Data is processed solely to provide the requested feature. Recent places, Favorites and language remain only in the browser or on the device. In the Android app, measurement units and the latest weather also remain local for offline viewing and the widget, with cloud backup and transfer disabled. Forecasts require an Internet connection. WeatherApp does not maintain a user database; in the Android app, location is acquired only on explicit request. The resulting place and approximate coordinates may be saved in Recent searches or Favorites for subsequent weather views and refreshes; no movement history is recorded.</p>
 
-      <h2>Website, cookies and local storage</h2>
+      <p>At startup, WeatherApp V4 checks Google Play for an available update. According to Google’s documentation, this check processes device metadata, the app version and the list of installed modules and asset packs to determine update availability. Google Play handles this processing under its own terms and privacy policy; WeatherApp does not receive advertising identifiers from this check.</p>
+    <p>The app also stores the version of the latest what’s-new notice already shown. Per-location weather cache and widget data are separate from the Recent list: clearing that list does not delete these values. Cache, widget data and preferences are removed by clearing app data in Android settings or uninstalling the app.</p>
+
+    <h2>Website, cookies and local storage</h2>
       <p>The web app does not set cookies or save search history in a WeatherApp database. It stores only Recent searches, Favorites and language in the browser. The website and this page are hosted by Vercel, which may process IP addresses, approximate location, device technical data and logs under its own privacy policy. Recent searches can be cleared with Clear, and Favorites removed with the star button. Local values are removed by clearing website or app data and are not synchronized between devices.</p>
 
       <h2>External providers</h2>
       <ul>
+      <li><a href="https://developer.android.com/guide/playcore/in-app-updates#data-safety">Google Play</a>: app update availability checks.</li>
         <li><a href="https://open-meteo.com/en/terms">Open-Meteo GmbH</a>: weather, air quality, pollen, time zones, astronomical events and geocoding, data attributed under CC BY 4.0.</li>
         <li><a href="https://atmosphere.copernicus.eu/">Copernicus CAMS</a>: air-quality and pollen data used by the Android app and distributed through Open-Meteo.</li>
         <li><a href="https://policies.google.com/privacy">Android services</a>: approximate location and geocoding used only after an explicit request.</li>
